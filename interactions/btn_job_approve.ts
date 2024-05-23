@@ -20,7 +20,7 @@ export async function execute(interaction: ButtonInteraction) {
             })
         }
     } catch {}
-    const applyButton = new ButtonBuilder().setCustomId('btn_job_apply_paid').setLabel('Hire').setStyle(ButtonStyle.Success).setEmoji('📝')
+    const applyButton = new ButtonBuilder().setCustomId('btn_job_apply_hire').setLabel('Hire').setStyle(ButtonStyle.Success).setEmoji('📝')
     const reportButton = new ButtonBuilder().setCustomId('btn_job_report_paid').setLabel('Report').setStyle(ButtonStyle.Danger).setEmoji('🚨')
     const bumpButton = new ButtonBuilder().setCustomId('btn_job_bump').setLabel('Bump').setStyle(ButtonStyle.Primary).setEmoji('🚀')
     const messageActionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(bumpButton)

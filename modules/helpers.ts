@@ -49,7 +49,7 @@ export function getJobEmbed(job_title: string, job_desc: string, job_budget: str
 export function getAdEmbed(ad_title: string, ad_description: string, ad_budget: string, ad_deadline: string, ad_avatar_url: string | null, ad_id: string): APIEmbed {
   return {
       title: `<:title:1241292941117493278> ${ad_title}`,
-      description: `<:Gap:1239281994245083217>\n<:description:1241292933056167936> **Description**\n<:angle:1241292943818493962> ${ad_description}\n<:Gap:1239281994245083217>#n**Freelancer Level** : 3`,
+      description: `<:Gap:1239281994245083217>\n<:description:1241292933056167936> **Description**\n<:angle:1241292943818493962> ${ad_description}\n<:Gap:1239281994245083217>`,
       color: 0x1b9ee6,
       fields: [
         {

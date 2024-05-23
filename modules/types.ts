@@ -52,5 +52,6 @@ export interface Job {
         url: string
     },
     proposals: Array<string>,
-    creationDate: number
+    creationDate: number,
+    bumpDate: number
 }

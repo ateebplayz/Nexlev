@@ -1,6 +1,6 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ModalBuilder, ModalSubmitInteraction, TextChannel, TextInputBuilder, TextInputStyle } from "discord.js"
-import { createJob, searchJob } from "../modules/db"
-import { generateRandomString, getJobEmbed } from "../modules/helpers"
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ComponentType, Message, ModalBuilder, ModalSubmitInteraction, TextChannel, TextInputBuilder, TextInputStyle } from "discord.js"
+import { createJob, findJobs, searchJob } from "../modules/db"
+import { generateRandomString, getAdEmbed, getJobEmbed } from "../modules/helpers"
 import { Job } from "../modules/types"
 import { channels } from ".."
 
@@ -10,13 +10,12 @@ export const data = {
 }
 export async function execute(interaction: ButtonInteraction) {
     // Creating Text Input Fields
-    const text_gig_title = new TextInputBuilder().setCustomId('text_gig_title').setLabel('Gig Title').setMaxLength(50).setMinLength(3).setPlaceholder('What is this Gig about?').setRequired(true).setStyle(TextInputStyle.Short)
-    const text_gig_desc = new TextInputBuilder().setCustomId('text_gig_desc').setLabel('Gig Description').setMaxLength(2000).setMinLength(3).setPlaceholder('Please share the Gig details such as requirements, experience, or any skills needed.').setRequired(true).setStyle(TextInputStyle.Paragraph)
-    const text_gig_budget = new TextInputBuilder().setCustomId('text_gig_budget').setLabel('Gig Budget').setMaxLength(50).setMinLength(3).setPlaceholder('What is the budget for this Gig?').setRequired(true).setStyle(TextInputStyle.Short)
-    const text_gig_deadline = new TextInputBuilder().setCustomId('text_gig_deadline').setLabel('Gig Deadline').setMaxLength(50).setMinLength(3).setPlaceholder('Enter a deadline for this Gig. If you do not have any, type n/a').setStyle(TextInputStyle.Short)
-    const text_gig_ref = new TextInputBuilder().setCustomId('text_gig_ref').setLabel('Gig Reference').setMaxLength(2000).setMinLength(3).setPlaceholder('Please provide any reference examples for the Gig. You can use any URL as a reference.').setRequired(true).setStyle(TextInputStyle.Paragraph)
-    const textInputs = [text_gig_title, text_gig_desc, text_gig_budget, text_gig_deadline, text_gig_ref]
-    const modal = new ModalBuilder().setCustomId('modal_gig_hire_'+interaction.id).setTitle('Post a Hire Gig')
+    const text_gig_title = new TextInputBuilder().setCustomId('text_gig_title').setLabel('For-Hire Title').setMaxLength(50).setMinLength(3).setPlaceholder('What service or skills are you offering?').setRequired(true).setStyle(TextInputStyle.Short)
+    const text_gig_desc = new TextInputBuilder().setCustomId('text_gig_desc').setLabel('For-Hire Description').setMaxLength(2000).setMinLength(3).setPlaceholder('Please share details about the service you are offering. Tell us about your skills, experience, etc.').setRequired(true).setStyle(TextInputStyle.Paragraph)
+    const text_gig_budget = new TextInputBuilder().setCustomId('text_gig_budget').setLabel('Your Portfolio Link').setMaxLength(50).setMinLength(3).setPlaceholder('Share your Nexlev portfolio link or your custom site portfolio.').setRequired(true).setStyle(TextInputStyle.Paragraph)
+    const text_gig_deadline = new TextInputBuilder().setCustomId('text_gig_deadline').setLabel('Payment Method').setMaxLength(50).setMinLength(3).setPlaceholder('What’s your preferred payment method?').setStyle(TextInputStyle.Short)
+    const textInputs = [text_gig_title, text_gig_desc, text_gig_budget, text_gig_deadline]
+    const modal = new ModalBuilder().setCustomId('modal_gig_hire_'+interaction.id).setTitle('Post a For Hire Ad')
 
     textInputs.forEach(textInput => {
         let actionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(textInput)
@@ -24,57 +23,85 @@ export async function execute(interaction: ButtonInteraction) {
     })
 
     await interaction.showModal(modal)
-    /* const jobFind = await searchJob(interaction.user.id)
-    if(jobFind !== 'None') {
-        return interaction.reply({content: 'You already have a job posting or one of your jobs are under review. Please wait before reposting or close your previous job listing.', ephemeral: true})
-    }
-    */
-    const filter = (i: ModalSubmitInteraction) => i.customId === `modal_gi_hire_${interaction.id}`
+    const filter = (i: ModalSubmitInteraction) => i.customId === ('modal_gig_hire_'+interaction.id)
+    const jobId = generateRandomString()
+    let job_title = ""
+    let job_desc = ""
+    let job_portfolio = ""
+    let job_method = ""
+    let msg: Message<boolean> | undefined
+    let job_type: 'Writing' | 'Voice' | 'VFX' | 'Thumbnail' | 'Video' = 'Writing'
+    if(interaction.customId.endsWith('vo')) job_type = 'Voice'
+    if(interaction.customId.endsWith('vf')) job_type = 'VFX'
+    if(interaction.customId.endsWith('th')) job_type = 'Thumbnail'
+    if(interaction.customId.endsWith('vi')) job_type = 'Video'
     await interaction.awaitModalSubmit({filter: filter, time: 6000_00}).then(async (mI: ModalSubmitInteraction) => {
-        const buttonApprove = new ButtonBuilder().setCustomId('btn_job_approve').setLabel('Approve').setStyle(ButtonStyle.Success)
-        const buttonReject = new ButtonBuilder().setCustomId('btn_job_reject').setLabel('Reject').setStyle(ButtonStyle.Danger)
-        const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(buttonApprove, buttonReject)
-        const job_title = mI.fields.getTextInputValue('text_gig_title')
-        const job_desc = mI.fields.getTextInputValue('text_gig_desc')
-        const job_budget = mI.fields.getTextInputValue('text_gig_budget')
-        const job_deadline = mI.fields.getTextInputValue('text_gig_deadline')
-        const job_ref = mI.fields.getTextInputValue('text_gig_ref')
-        const jobId = generateRandomString()
-        const embed = getJobEmbed(job_title, job_desc, job_budget, job_ref, job_deadline, mI.user.tag, mI.user.avatarURL(), jobId)
-        let job_type: 'Writing' | 'Voice' | 'VFX' | 'Thumbnail' | 'Video' = 'Writing'
-        if(interaction.customId.endsWith('vo')) job_type = 'Voice'
-        if(interaction.customId.endsWith('vf')) job_type = 'VFX'
-        if(interaction.customId.endsWith('th')) job_type = 'Thumbnail'
-        if(interaction.customId.endsWith('vi')) job_type = 'Video'
-        mI.reply({
-            content: `Below is what your ad will look like. It's been sent to our moderators for review. You'll be notified if its accepted.`,
+        await mI.deferReply({ephemeral: true})
+        const userJobs =await  findJobs(mI.user.id)
+        let found = false
+        userJobs.forEach((job)=>{
+            if(job.skill == job_type) found = true
+        })
+        if(found) {
+            return mI.editReply({embeds: [
+                {
+                  "description": "<:flecha113:1239895323594457149> Hey, you have already posted a for-hire ad. You cannot post the same ad more than once. If you want to edit or repost your for-hire ad, you can delete the existing one by using the command /post delete. This command will delete your current ad, allowing you to repost it again if you wish.\n\n<:line_arrow_white1:1239912525143871518> Or, if you want to increase your for-hire ad visibility, you can bump your post. The bump option is below your post.",
+                  "color": 0x1b9ee6
+                }
+              ]})
+        }
+        job_title = mI.fields.getTextInputValue('text_gig_title')
+        job_desc = mI.fields.getTextInputValue('text_gig_desc')
+        job_portfolio = mI.fields.getTextInputValue('text_gig_budget')
+        job_method = mI.fields.getTextInputValue('text_gig_deadline')
+        if(!job_portfolio.startsWith('http')) {
+            return mI.editReply({content: `You must have your portfolio link starting with "http" or "https." For a free portfolio, create now on nexlev.io.`})
+        }
+        const confirmButton = new ButtonBuilder().setCustomId('btn_confirm_job_paid').setLabel('Confirm').setStyle(ButtonStyle.Success)
+        const cancelButton = new ButtonBuilder().setCustomId('btn_cancel_job_paid').setLabel('Cancel').setStyle(ButtonStyle.Danger)
+        const actionRowTemp = new ActionRowBuilder<ButtonBuilder>().addComponents(confirmButton, cancelButton)
+        const embed = getAdEmbed(job_title, job_desc, job_portfolio, job_method, mI.user.avatarURL(), jobId)
+        msg = await mI.editReply({
+            content: `Below is what your ad will look like.`,
             embeds: [
                 embed
-              ],
-            ephemeral: true
-        })
-        try {
-          const msg = await (channels.dashboard as TextChannel).send({embeds: [getJobEmbed(job_title, job_desc, job_budget, job_ref, job_deadline, mI.user.tag, mI.user.avatarURL() || '', jobId)], components: [actionRow]})          
-            const job: Job = {
-                id: jobId,
-                userId: mI.user.id,
-                jobType: "Hire",
-                userTag: mI.user.tag,
-                title: job_title,
-                description: job_desc,
-                budget: job_budget,
-                deadline: job_deadline,
-                reference: job_ref,
-                skill: job_type,
-                message: {
-                    id: msg.id,
-                    url: msg.url
-                },
-                proposals: [],
-                creationDate: Date.now()
-            }
-            createJob(job)
-        } catch {}
+            ], 
+            components: [actionRowTemp]
+        })  
     })
+    try {
+        msg?.awaitMessageComponent<ComponentType.Button>({time: 60000_00}).then(async (bI: ButtonInteraction) => {
+            try {   
+                if(bI.customId == 'btn_cancel_job_paid') {
+                    return bI.reply({content: `You have cancelled your paid job request.`, ephemeral: true})
+                }
+                bI.reply({content: `Your post has been sent in for approval. You will be notified when your for-hire ad is listed.`, ephemeral: true})
+                const buttonApprove = new ButtonBuilder().setCustomId('btn_job_approve').setLabel('Approve').setStyle(ButtonStyle.Success)
+                const buttonReject = new ButtonBuilder().setCustomId('btn_job_reject').setLabel('Reject').setStyle(ButtonStyle.Danger)
+                const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(buttonApprove, buttonReject)
+                  const msg = await (channels.dashboard as TextChannel).send({embeds: [getAdEmbed(job_title, job_desc, job_portfolio, job_method, bI.user.avatarURL(), jobId)], components: [actionRow]})          
+                    const job: Job = {
+                        id: jobId,
+                        userId: bI.user.id,
+                        jobType: "Hire",
+                        userTag: bI.user.tag,
+                        title: job_title,
+                        description: job_desc,
+                        budget: job_portfolio,
+                        deadline: job_method,
+                        reference: 'N/A',
+                        skill: job_type,
+                        message: {
+                            id: msg.id,
+                            url: msg.url
+                        },
+                        proposals: [],
+                        creationDate: Date.now(),
+                        bumpDate: Date.now(),
+                    }
+                    createJob(job)
+                } catch {}
+        })
+    } catch {}
     return
 }

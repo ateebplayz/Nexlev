@@ -16,9 +16,19 @@ interface Channels {
     paidVideo: discord.Channel | undefined | null
     paidVfx: discord.Channel | undefined | null
     reportLog: discord.Channel | undefined | null
+    hireWriting: discord.Channel | undefined | null
+    hireVoice: discord.Channel | undefined | null
+    hireThumbnail: discord.Channel | undefined | null
+    hireVideo: discord.Channel | undefined | null
+    hireVfx: discord.Channel | undefined | null
 }
 export let channels: Channels = {
     dashboard: null,
+    hireWriting: null,
+    hireVoice: null,
+    hireThumbnail: null,
+    hireVideo: null,
+    hireVfx: null,
     paidWriting: null,
     paidVoice: null,
     paidThumbnail: null,
@@ -69,7 +79,7 @@ client.on('interactionCreate', async (interaction) => {
         }
     } else if(interaction.isRepliable()) {
         const timer = Date.now()
-        // if(interaction.customId.startsWith('btn_confirm_job_paid')) return
+        // if(interaction.customId.startsWith('btn_confirm_job_hire')) return
         let localInteraction = client.interactions.get(interaction.customId)
         if(interaction.customId.startsWith('btn_job_paid')) {
             if(interaction.customId.endsWith(interaction.id)) {
@@ -92,11 +102,11 @@ client.on('interactionCreate', async (interaction) => {
             await localInteraction.execute(interaction)
             console.log(`${chalk.green('EXECUTE >>')} Interaction ${localInteraction.data.customId} ${Date.now() - timer}ms | ${interaction.user.id}`)
         } catch (e) {
-            const errorId = '210ie90132ir9e032ur9032u9tru98ur9328ur8932ure9328ur932ur8932ur923ur8932u8x'
+            /*const errorId = '210ie90132ir9e032ur9032u9tru98ur9328ur8932ure9328ur932ur8932ur923ur8932u8x'
             console.log(`${chalk.red('EXECUTE ERROR >>')} Interaction ${localInteraction.data.customId} ${Date.now() - timer}ms ${errorId}`)
             console.error(e)
 
-            await interaction.channel?.send({embeds: [new RunTimeErrorEmbed(errorId)] }).catch(console.log)
+            await interaction.channel?.send({embeds: [new RunTimeErrorEmbed(errorId)] }).catch(console.log)*/
         }
     }
 })
@@ -128,7 +138,7 @@ client.on('messageCreate', async (message) => {
         switch (message.content.endsWith('fha')) {
             case true: 
                 message.channel.send({embeds: [{
-                    "description": "# <:flecha113:1239895323594457149> Post Your For-Hire AD: # \n<:Gap:1239281994245083217>\n**For-Hire Section:** Freelancers and employees post their for-hire ads in those channels, and clients and recruiters hire those people from those channels.\n\n\n<:line_arrow_white1:1239912525143871518> To post a for-hire ad, click on the relevant button to post your ad.\n\n<:line_arrow_white1:1239912525143871518> For detailed information and a tutorial guide on how to use the marketplace, please visit: <#1237689319712493569>",
+                    "description": "# <:flecha113:1239895323594457149> Post Your For-Hire AD: # \n<:Gap:1239281994245083217>\n**For-Hire Section:** Freelancers and employees post their for-hire ads in those channels, and clients and recruiters hire those people from those channels.\n\n\n<:line_arrow_white1:1239912525143871518> To post a for-hire ad, click on the relevant button below to post your ad in the 'for hire' section.\n\n<:line_arrow_white1:1239912525143871518> For detailed information and a tutorial guide on how to use the marketplace, please visit: <#1237689319712493569>",
                     "color": 1617919,
                     "image": {
                         "url": "https://media.discordapp.net/attachments/1072534359376146522/1239894378043019305/nexlev_talent-01.jpg?ex=6644951f&is=6643439f&hm=d4bd7abb07849ef6f9a51b22e9b2af27e0bb52eefe98fb6bae6bc097dfefa848&=&format=webp&width=1200&height=675"
@@ -222,6 +232,12 @@ client.once('ready', async (readyClient) => {
     channels.paidVideo = readyClient.channels.cache.get('1237159528676458599')
     channels.paidVfx = readyClient.channels.cache.get('1237160166219059200')
     channels.reportLog = readyClient.channels.cache.get('1237835829104218185')
+
+    channels.hireWriting = readyClient.channels.cache.get('1237160760896131143')
+    channels.hireVoice = readyClient.channels.cache.get('1237160715429875803')
+    channels.hireThumbnail = readyClient.channels.cache.get('1237160651592437790')
+    channels.hireVideo = readyClient.channels.cache.get('1237160602540179487')
+    channels.hireVfx = readyClient.channels.cache.get('1237160431706181642')
     console.log(chalk.bold(chalk.green('Bot is ready to go.\n\n')) + `${chalk.bold('Client ID')} : ${process.env.CLIENTID}\n${chalk.bold('Client Username')} : ${readyClient.user.username}`)
 })
 

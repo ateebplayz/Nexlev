@@ -62,7 +62,6 @@ export async function execute(interaction: ButtonInteraction) {
             if(bI.customId == 'btn_cancel_job_paid') {
                 return bI.reply({content: `You have cancelled your paid job request.`, ephemeral: true})
             }
-            console.log('b')
             bI.reply({content: `Your job has been successfully posted`, ephemeral: true})
             try {
                 const member = interaction.guild?.members.fetch(bI.user)
@@ -80,11 +79,13 @@ export async function execute(interaction: ButtonInteraction) {
             } catch {}
             const applyButton = new ButtonBuilder().setCustomId('btn_job_apply_paid').setLabel('Submit Proposal').setStyle(ButtonStyle.Success).setEmoji('💼')
             const reportButton = new ButtonBuilder().setCustomId('btn_job_report_paid').setLabel('Report').setStyle(ButtonStyle.Danger).setEmoji('🚨')
+            const bumpButton = new ButtonBuilder().setCustomId('btn_job_bump').setLabel('Bump').setStyle(ButtonStyle.Primary).setEmoji('🚀')
+            const messageActionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(bumpButton)
             const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(applyButton, reportButton)
             switch(job_type) {
                 case 'Writing':
-                    let ping = `**Job Notification:** <@&1239912045521145886>`
-                    let msg = await (channels.paidWriting as ForumChannel).threads.create({name: job_title, message: {content: ping, embeds: [embed], components: [actionRow]}})
+                    let msg = await (channels.paidWriting as ForumChannel).threads.create({name: job_title, message: {embeds: [embed], components: [actionRow]}})
+                    msg.send({components: [messageActionRow], content: `👉  Bump your post by clicking on the 'Bump' button, it will boost your post's visibility.`})
                     const job: Job = {
                         id: jobId,
                         userId: bI.user.id,
@@ -101,13 +102,15 @@ export async function execute(interaction: ButtonInteraction) {
                             url: msg.url
                         },
                         proposals: [],
-                        creationDate: Date.now()
+                        creationDate: Date.now(),
+                        bumpDate: Date.now()
                     }
                     createJobVerified(job)
                     break
                 case 'Thumbnail':
                     let ping2 = `**Job Notification:** <@&1240765963272716390>`
-                    let msg2 = await (channels.paidThumbnail as ForumChannel).threads.create({name: job_title, message: {content: ping2, embeds: [embed], components: [actionRow]}})
+                    let msg2 = await (channels.paidThumbnail as ForumChannel).threads.create({name: job_title, message: {embeds: [embed], components: [actionRow]}})
+                    msg2.send({components: [messageActionRow], content: `👉  Bump your post by clicking on the 'Bump' button, it will boost your post's visibility.`})
                     const job2: Job = {
                         id: jobId,
                         userId: bI.user.id,
@@ -124,13 +127,15 @@ export async function execute(interaction: ButtonInteraction) {
                             url: msg2.url
                         },
                         proposals: [],
-                        creationDate: Date.now()
+                        creationDate: Date.now(),
+                        bumpDate: Date.now()
                     }
                     createJobVerified(job2)
                     break
                 case 'VFX':
                     let ping3 = `**Job Notification:** <@&1240766032130347158>`
-                    let msg3 = await (channels.paidVfx as ForumChannel).threads.create({name: job_title, message: {content: ping3, embeds: [embed], components: [actionRow]}})
+                    let msg3 = await (channels.paidVfx as ForumChannel).threads.create({name: job_title, message: {embeds: [embed], components: [actionRow]}})
+                    msg3.send({components: [messageActionRow], content: `👉  Bump your post by clicking on the 'Bump' button, it will boost your post's visibility.`})
                     const job3: Job = {
                         id: jobId,
                         userId: bI.user.id,
@@ -147,13 +152,15 @@ export async function execute(interaction: ButtonInteraction) {
                             url: msg3.url
                         },
                         proposals: [],
-                        creationDate: Date.now()
+                        creationDate: Date.now(),
+                        bumpDate: Date.now()
                     }
                     createJobVerified(job3)
                     break
                 case 'Video':
                     let ping4 = `**Job Notification:** <@&1240766033506078891>`
-                    let msg4 = await (channels.paidVideo as ForumChannel).threads.create({name: job_title, message: {content: ping4, embeds: [embed], components: [actionRow]}})
+                    let msg4 = await (channels.paidVideo as ForumChannel).threads.create({name: job_title, message: {embeds: [embed], components: [actionRow]}})
+                    msg4.send({components: [messageActionRow], content: `👉  Bump your post by clicking on the 'Bump' button, it will boost your post's visibility.`})
                     const job4: Job = {
                         id: jobId,
                         userId: bI.user.id,
@@ -170,13 +177,15 @@ export async function execute(interaction: ButtonInteraction) {
                             url: msg4.url
                         },
                         proposals: [],
-                        creationDate: Date.now()
+                        creationDate: Date.now(),
+                        bumpDate: Date.now()
                     }
                     createJobVerified(job4)
                     break
                 case 'Voice':
-                    let ping5 = `**Job Notification:** <@&1240765855135174798>`
-                    let msg5 = await (channels.paidVoice as ForumChannel).threads.create({name: job_title, message: {content: ping5, embeds: [embed], components: [actionRow]}})
+                    let ping5 = `**Job Notification:** <@&1240765855135174798>`;
+                    let msg5 = await (channels.paidVoice as ForumChannel).threads.create({name: job_title, message: {embeds: [embed], components: [actionRow]}})
+                    msg5.send({components: [messageActionRow], content: `👉  Bump your post by clicking on the 'Bump' button, it will boost your post's visibility.`})
                     const job5: Job = {
                         id: jobId,
                         userId: bI.user.id,
@@ -193,7 +202,8 @@ export async function execute(interaction: ButtonInteraction) {
                             url: msg5.url
                         },
                         proposals: [],
-                        creationDate: Date.now()
+                        creationDate: Date.now(),
+                        bumpDate: Date.now()
                     }
                     createJobVerified(job5)
                     break

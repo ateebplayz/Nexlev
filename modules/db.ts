@@ -29,3 +29,36 @@ export async function addProposal(userId: string, jobId: string) {
     job.proposals.push(userId)
     collections.verifiedJobs.updateOne({id: jobId}, {$set: job})
 }
+export async function bumpPost(jobId: string) {
+    let job = await findJob(jobId)
+    job.bumpDate = Date.now()
+    collections.verifiedJobs.updateOne({id: jobId}, {$set: job})
+}
+export async function findJobs(userId: string) {
+    let jobs = await collections.verifiedJobs.find({userId: userId, jobType: 'Hire'}).toArray()
+    const unverfiedJobs = await collections.unverifiedJobs.find({userId: userId, jobType: 'Hire'}).toArray()
+    unverfiedJobs.forEach((job)=>{jobs.push(job)})
+    return jobs
+}
+export async function rejectJob(jobId: string) {
+    let job = collections.unverifiedJobs.findOne({id: jobId})
+    collections.unverifiedJobs.deleteOne({id: jobId})
+    return job || zeroJob
+}
+export async function approveJob(jobId: string) {
+    let job = await collections.unverifiedJobs.findOne({id: jobId})
+    if(job) {
+        rejectJob(job.id)
+        collections.verifiedJobs.insertOne(job)
+    }
+    return job || zeroJob
+}
+export async function updateMessage(jobId: string, messageId: string, messageUrl: string) {
+    let job = await collections.verifiedJobs.findOne({id: jobId})
+    if(job) {
+        job.message.id = messageId
+        job.message.url = messageUrl
+        collections.verifiedJobs.updateOne({id: jobId}, {$set: job})
+    }
+    return job
+}

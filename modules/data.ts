@@ -17,5 +17,6 @@ export const zeroJob: Job = {
         url: ""
     },
     proposals: [],
-    creationDate: 0
+    creationDate: 0,
+    bumpDate: 0
 }

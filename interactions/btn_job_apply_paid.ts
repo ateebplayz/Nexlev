@@ -50,6 +50,6 @@ export async function execute(interaction: ButtonInteraction) {
                   ], components: [actionRow]})
             })
         } catch {}
-    }).catch()
+    }).catch((e)=>{})
     return
 }

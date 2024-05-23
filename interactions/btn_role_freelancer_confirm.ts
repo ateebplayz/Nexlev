@@ -11,7 +11,7 @@ export async function execute(interaction: ButtonInteraction) {
         const role = await member.guild.roles.fetch('1237694103010152458')
         if(role) 
         member.roles.add(role)
-        interaction.reply(`You've successfully been given the <@&${role?.id}> role.`)
+        interaction.reply({content: `You've successfully been given the <@&${role?.id}> role.`, ephemeral: true})
     } catch {}
     return
 }

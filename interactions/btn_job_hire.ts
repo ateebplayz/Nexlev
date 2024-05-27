@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ComponentType, Message, ModalBuilder, ModalSubmitInteraction, TextChannel, TextInputBuilder, TextInputStyle } from "discord.js"
-import { createJob, findJobs, searchJob } from "../modules/db"
+import { addUser, createJob, existsUser, findJobs, searchJob } from "../modules/db"
 import { generateRandomString, getAdEmbed, getJobEmbed } from "../modules/helpers"
-import { Job } from "../modules/types"
+import { Job, User } from "../modules/types"
 import { channels } from ".."
 
 export const data = {
@@ -37,6 +37,15 @@ export async function execute(interaction: ButtonInteraction) {
     if(interaction.customId.endsWith('vi')) job_type = 'Video'
     await interaction.awaitModalSubmit({filter: filter, time: 6000_00}).then(async (mI: ModalSubmitInteraction) => {
         await mI.deferReply({ephemeral: true})
+        const user: User = {
+            userId: interaction.user.id,
+            userTag: interaction.user.tag,
+            skills: [],
+            reviews: []
+        }
+        let existance = await existsUser(interaction.user.id)
+        console.log(existance)
+        if(!existance) addUser(user)
         const userJobs =await  findJobs(mI.user.id)
         let found = false
         userJobs.forEach((job)=>{
@@ -68,7 +77,7 @@ export async function execute(interaction: ButtonInteraction) {
             ], 
             components: [actionRowTemp]
         })  
-    })
+    }).catch()
     try {
         msg?.awaitMessageComponent<ComponentType.Button>({time: 60000_00}).then(async (bI: ButtonInteraction) => {
             try {   

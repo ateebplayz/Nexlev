@@ -21,6 +21,13 @@ interface Channels {
     hireThumbnail: discord.Channel | undefined | null
     hireVideo: discord.Channel | undefined | null
     hireVfx: discord.Channel | undefined | null
+
+    logApproval: discord.Channel | undefined | null
+    logWarn: discord.Channel | undefined | null
+    logMessage: discord.Channel | undefined | null
+    logBump: discord.Channel | undefined | null
+
+    reviewVerif: discord.Channel | undefined | null
 }
 export let channels: Channels = {
     dashboard: null,
@@ -34,7 +41,12 @@ export let channels: Channels = {
     paidThumbnail: null,
     paidVideo: null,
     paidVfx: null,
-    reportLog: null
+    reportLog: null,
+    logApproval: null,
+    logWarn: null,
+    logMessage: null,
+    logBump: null,
+    reviewVerif: null
 }
 
 export const client = new discord.Client({intents: [discord.GatewayIntentBits.Guilds, discord.GatewayIntentBits.MessageContent, discord.GatewayIntentBits.GuildMessages, discord.GatewayIntentBits.DirectMessages, discord.GatewayIntentBits.GuildMembers]}) as VerifyClient
@@ -238,6 +250,13 @@ client.once('ready', async (readyClient) => {
     channels.hireThumbnail = readyClient.channels.cache.get('1237160651592437790')
     channels.hireVideo = readyClient.channels.cache.get('1237160602540179487')
     channels.hireVfx = readyClient.channels.cache.get('1237160431706181642')
+    
+    channels.logApproval = readyClient.channels.cache.get('1237846323819188315')
+    channels.logWarn = readyClient.channels.cache.get('1237846573367693473')
+    channels.logMessage = readyClient.channels.cache.get('1237845741574164530')
+    channels.logBump = readyClient.channels.cache.get('1240966428362936421')
+    
+    channels.reviewVerif = readyClient.channels.cache.get('1242542393455017994')
     console.log(chalk.bold(chalk.green('Bot is ready to go.\n\n')) + `${chalk.bold('Client ID')} : ${process.env.CLIENTID}\n${chalk.bold('Client Username')} : ${readyClient.user.username}`)
 })
 

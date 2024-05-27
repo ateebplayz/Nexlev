@@ -1,6 +1,6 @@
 import { zeroJob } from "./data";
 import { collections } from "./mongo";
-import { Job } from "./types";
+import { Job, Review, User } from "./types";
 
 export async function createJob(job: Job) {
     await collections.unverifiedJobs.insertOne(job)
@@ -61,4 +61,55 @@ export async function updateMessage(jobId: string, messageId: string, messageUrl
         collections.verifiedJobs.updateOne({id: jobId}, {$set: job})
     }
     return job
+}
+export async function existsUser(userId: string): Promise<boolean> {
+    let user = await collections.users.findOne({userId: userId})
+    if(user) return true
+        else return false
+}
+export async function addUser(user: User) {
+    collections.users.insertOne(user)
+}
+export async function addSkill(userId: string, userTag: string, skill: string) {
+    let user = await collections.users.findOne({userId: userId})
+    if(user) {
+        user.skills.push(skill)
+        collections.users.updateOne({userId: userId}, {$set: user})
+    } else {
+        addUser({
+            userId: userId,
+            userTag: userTag,
+            skills: [skill],
+            reviews: []
+        })
+    }
+}
+export async function removeSkill(userId: string, userTag: string, skill: string) {
+    let user = await collections.users.findOne({userId: userId})
+    if(user) {
+        let tempSkills: string[] = []
+        user.skills.forEach(sk => {
+            if(sk !== skill) tempSkills.push(sk)
+        })
+        user.skills = tempSkills
+        collections.users.updateOne({userId: userId}, {$set: user})
+    } else {
+        addUser({
+            userId: userId,
+            userTag: userTag,
+            skills: [],
+            reviews: []
+        })
+    }
+}
+export async function addReview(userId: string, review:Review) {
+    let user = await collections.users.findOne({userId: userId})
+    if(user) {
+        user?.reviews.push(review)
+        collections.users.updateOne({userId: userId}, {$set: user})
+    }
+}
+export async function getUser(userId: string): Promise<User> {
+    let user = await collections.users.findOne({userId: userId})
+    return user || {userId: '', userTag: '', reviews: [], skills: []}
 }

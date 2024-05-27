@@ -55,3 +55,17 @@ export interface Job {
     creationDate: number,
     bumpDate: number
 }
+
+export interface Review {
+    userId: string,
+    userTag: string,
+    review: string,
+    stars: number
+}
+
+export interface User {
+    userId: string,
+    userTag: string,
+    skills: string[]
+    reviews: Review[]
+}

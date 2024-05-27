@@ -1,6 +1,6 @@
 import { Job } from "./types"
 
-export const botColor = 0xffed00
+export const botColor = 0x1b9ee6
 export const zeroJob: Job = {
     id: "",
     userId: "",

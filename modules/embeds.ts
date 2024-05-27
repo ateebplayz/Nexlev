@@ -42,3 +42,12 @@ export class CooldownErrorEmbed extends ErrorEmbed {
 
     }
 }
+
+export class WarnEmbed extends discord.EmbedBuilder {
+    constructor(reason: string) {
+        super()
+        this.setColor(0xff0000)
+        this.setTitle('🚨 You have been warned.')
+        this.setDescription('**Reason**: ' + reason)
+    }
+}

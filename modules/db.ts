@@ -113,3 +113,10 @@ export async function getUser(userId: string): Promise<User> {
     let user = await collections.users.findOne({userId: userId})
     return user || {userId: '', userTag: '', reviews: [], skills: []}
 }
+export async function updateReview(userId: string, reviews: Array<Review>) {
+    let user = await collections.users.findOne({userId: userId})
+    if(user) {
+        user.reviews = reviews
+        collections.users.updateOne({userId: userId}, {$set: user})
+    }
+}

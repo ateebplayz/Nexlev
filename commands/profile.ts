@@ -41,6 +41,7 @@ export async function execute(interaction:CommandInteraction) {
                 reviews += "``Review By " + userDb.reviews[lastIndex].userTag +":`` " + userDb.reviews[lastIndex].review + "\n\n"
                 lastIndex -= 1
             }
+            if(reviews == ``) reviews = `This user has 0 reviews`
             console.log(reviews)
             const embed: APIEmbed = 
                   {

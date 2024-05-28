@@ -28,11 +28,18 @@ export async function execute(interaction: ButtonInteraction) {
               })
             lastIndex -= 1
         }
-        embeds.push({
-            "description": "<:1239895323594457149:1242753757356494878> To view a freelancer's detailed profile, including rating scores, reviews, and more, run the following command: /profile [@Name] , An embedded view with all open for you.",
-            "color": 0x1b9ee6
-          })
-        interaction.editReply({embeds: embeds})
+        if(user.reviews[0] == null || user.reviews[0] == undefined) {
+            interaction.editReply({embeds: [{
+                "description": "<:flecha113:1239895323594457149> This freelancer has 0 reviews in his profile. To learn more about this user, run the command (/profile @user) in any channel.",
+                "color": 0x1b9ee6
+              }]})
+        } else {
+            embeds.push({
+                "description": "<:flecha113:1239895323594457149> To view a freelancer's detailed profile, including rating scores, reviews, and more, run the following command: /profile [@Name] , An embedded view with all open for you.",
+                "color": 0x1b9ee6
+              })
+            interaction.editReply({embeds: embeds})
+        }
     }
     return
 }

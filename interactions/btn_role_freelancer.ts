@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle } from "discord.js"
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js"
 import { client } from ".."
 
 export const data = {
@@ -14,11 +14,17 @@ export async function execute(interaction: ButtonInteraction) {
             return interaction.reply({content: `You can no longer change your main role. If you wish to switch your role, please open a support ticket`, ephemeral: true})
         }
         if(role) {
-            const button = new ButtonBuilder().setCustomId('btn_role_freelancer_confirm').setLabel('Confirm').setStyle(ButtonStyle.Success)
-            const actionRow = new ActionRowBuilder<ButtonBuilder>().setComponents(button)
+            const textDropdown = new StringSelectMenuBuilder().setCustomId('select_role_freelancer').setMaxValues(5).setMinValues(1).setPlaceholder('Select Skills').setOptions([
+                new StringSelectMenuOptionBuilder().setDescription('Select the Writing Skill').setEmoji('✍️').setLabel('Writing').setValue('writing'),
+                new StringSelectMenuOptionBuilder().setDescription('Select the Voice Acting Skill').setEmoji('🎤').setLabel('Voice Acting').setValue('voice'),
+                new StringSelectMenuOptionBuilder().setDescription('Select the Video Editor Skill').setEmoji('📷').setLabel('Video Editor').setValue('video'),
+                new StringSelectMenuOptionBuilder().setDescription('Select the VFX/GFX Skill').setEmoji('✨').setLabel('VFX/GFX').setValue('vfx'),
+                new StringSelectMenuOptionBuilder().setDescription('Select the Thumbnail Artist Skill').setEmoji('🎨').setLabel('Thumbnail Artist').setValue('thumbnail')
+            ])
+            const actionRow = new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(textDropdown)
             interaction.reply({embeds: [
                 {
-                "description": `<:flecha113:1239895323594457149> Are you sure you want to select this (<@&${role?.id}>)  After confirming, you cannot undo your selection.`,
+                "description": `<:flecha113:1239895323594457149> Please select your skills from below`,
                 "color": 1617663
                 }
             ], components: [actionRow], ephemeral: true})

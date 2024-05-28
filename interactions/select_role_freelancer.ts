@@ -52,6 +52,6 @@ export async function execute(interaction: StringSelectMenuInteraction) {
     })
     const button = new ButtonBuilder().setCustomId('btn_role_freelancer_confirm').setLabel('Confirm').setStyle(ButtonStyle.Success)
     const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(button)
-    interaction.reply({content: `Welcome to the server. You've been awarded the ${skills.join(', ')} skills.`, components: [actionRow], ephemeral: true})
+    interaction.reply({content: `Welcome to the server. You've been awarded the skills. Confirm your freelancer role by clicking on the button below.`, components: [actionRow], ephemeral: true})
     return
 }

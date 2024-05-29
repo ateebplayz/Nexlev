@@ -23,6 +23,8 @@ export async function execute(interaction: ButtonInteraction) {
     })
 
     await interaction.showModal(modal)
+    let cp = ''
+    let pp = ''
     const filter = (i: ModalSubmitInteraction) => i.customId === ('modal_verify_review_'+interaction.id)
     await interaction.awaitModalSubmit({filter: filter, time: 600000}).then(async (mI) => {
         await mI.deferReply({ephemeral: true})
@@ -33,8 +35,8 @@ export async function execute(interaction: ButtonInteraction) {
         const reviewerReview = interaction.message.embeds[0].fields[3].value
 
         const scope = mI.fields.getTextInputValue('text_review_scope')
-        const pp = mI.fields.getTextInputValue('text_review_pp')
-        const cp = mI.fields.getTextInputValue('text_review_cp')
+        pp = mI.fields.getTextInputValue('text_review_pp')
+        cp = mI.fields.getTextInputValue('text_review_cp')
 
         if(!pp.startsWith('http') || !cp.startsWith('http')) {
             return mI.editReply({content: `Both Contract or Agreement and Payment Proof must be a link/URL address.`})
@@ -56,17 +58,19 @@ export async function execute(interaction: ButtonInteraction) {
         mI.editReply({content: `Thank you, the review will be reviewed by our moderation team and added to your profile.`});
         (channels.reviewVerif as TextChannel).send({embeds: [embed], components: [actionRow]})
     }).catch()
-    if (interaction.channel && interaction.channel.isDMBased()) {
-        interaction.message.delete().catch(console.error);
-    } else {
-        // Handle the case where the interaction channel is not cached or not a text channel
-        try {
-            const fetchedMessage = await (interaction.channel as unknown as DMChannel).messages.fetch(interaction.message.id);
-            if (fetchedMessage) {
-                fetchedMessage.delete().catch(console.error);
+    if(pp.startsWith('http') && cp.startsWith('http')) {
+        if (interaction.channel && interaction.channel.isDMBased()) {
+            interaction.message.delete().catch(console.error);
+        } else {
+            // Handle the case where the interaction channel is not cached or not a text channel
+            try {
+                const fetchedMessage = await (interaction.channel as unknown as DMChannel).messages.fetch(interaction.message.id);
+                if (fetchedMessage) {
+                    fetchedMessage.delete().catch(console.error);
+                }
+            } catch (error) {
+                console.error('Error deleting message:', error);
             }
-        } catch (error) {
-            console.error('Error deleting message:', error);
         }
     }
     return

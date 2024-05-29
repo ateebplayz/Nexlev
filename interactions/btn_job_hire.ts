@@ -1,6 +1,6 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ComponentType, Message, ModalBuilder, ModalSubmitInteraction, TextChannel, TextInputBuilder, TextInputStyle } from "discord.js"
 import { addUser, createJob, existsUser, findJobs, searchJob } from "../modules/db"
-import { generateRandomString, getAdEmbed, getJobEmbed } from "../modules/helpers"
+import { generateRandomString, getAdEmbed, getAdEmbedCat, getJobEmbed } from "../modules/helpers"
 import { Job, User } from "../modules/types"
 import { channels } from ".."
 
@@ -82,13 +82,13 @@ export async function execute(interaction: ButtonInteraction) {
         msg?.awaitMessageComponent<ComponentType.Button>({time: 60000_00}).then(async (bI: ButtonInteraction) => {
             try {   
                 if(bI.customId == 'btn_cancel_job_paid') {
-                    return bI.reply({content: `You have cancelled your paid job request.`, ephemeral: true})
+                    return bI.reply({content: `You have canceled your for-hire post request.`, ephemeral: true})
                 }
                 bI.reply({content: `Your post has been sent in for approval. You will be notified when your for-hire ad is listed.`, ephemeral: true})
                 const buttonApprove = new ButtonBuilder().setCustomId('btn_job_approve').setLabel('Approve').setStyle(ButtonStyle.Success)
                 const buttonReject = new ButtonBuilder().setCustomId('btn_job_reject').setLabel('Reject').setStyle(ButtonStyle.Danger)
                 const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(buttonApprove, buttonReject)
-                  const msg = await (channels.dashboard as TextChannel).send({embeds: [getAdEmbed(job_title, job_desc, job_portfolio, job_method, bI.user.avatarURL(), jobId)], components: [actionRow]})          
+                  const msg = await (channels.dashboard as TextChannel).send({embeds: [getAdEmbedCat(job_title, job_desc, job_portfolio, job_method, bI.user.avatarURL(), jobId, job_type)], components: [actionRow]})          
                     const job: Job = {
                         id: jobId,
                         userId: bI.user.id,

@@ -19,6 +19,9 @@ export async function execute(interaction:CommandInteraction) {
     await interaction.deferReply({ephemeral: true})
     const freelancer = (interaction as ChatInputCommandInteraction).options.getUser('freelancer', true)
     const review = (interaction as ChatInputCommandInteraction).options.getString('review', true)
+    if(freelancer.id == interaction.user.id) {
+        return interaction.editReply(`You cannot submit a review for yourself.`)
+    }
     let stars = 0
     switch ((interaction as ChatInputCommandInteraction).options.getString('stars', true)) {
         case '1':

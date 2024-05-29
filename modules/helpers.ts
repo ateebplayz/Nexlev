@@ -46,6 +46,7 @@ export function getJobEmbed(job_title: string, job_desc: string, job_budget: str
       }
     }
 }
+
 export function getAdEmbed(ad_title: string, ad_description: string, ad_budget: string, ad_deadline: string, ad_avatar_url: string | null, ad_id: string): APIEmbed {
   return {
       title: `<:title:1241292941117493278> ${ad_title}`,
@@ -61,6 +62,37 @@ export function getAdEmbed(ad_title: string, ad_description: string, ad_budget: 
           name: '<:title:1241292941117493278> **Payment Method**',
           value: `<:angle:1241292943818493962> ${ad_deadline}\n<:Gap:1239281994245083217>`,
           inline: true
+        },
+      ],
+      thumbnail: {
+        url: ad_avatar_url || ''
+      },
+      footer: {
+          text: `POST ID : ${ad_id}`,
+          icon_url: `https://i.imgur.com/rCcyC7o.png`
+      }
+    }
+}
+export function getAdEmbedCat(ad_title: string, ad_description: string, ad_budget: string, ad_deadline: string, ad_avatar_url: string | null, ad_id: string, job_category: string): APIEmbed {
+  return {
+      title: `<:title:1241292941117493278> ${ad_title}`,
+      description: `<:Gap:1239281994245083217>\n<:description:1241292933056167936> **Description**\n<:angle:1241292943818493962> ${ad_description}\n<:Gap:1239281994245083217>`,
+      color: 0x1b9ee6,
+      fields: [
+        {
+          name: '<:budget:1241292938248458240> **Portfolio**',
+          value: `<:angle:1241292943818493962> ${ad_budget}`,
+          inline: true
+        },
+        {
+          name: '<:title:1241292941117493278> **Payment Method**',
+          value: `<:angle:1241292943818493962> ${ad_deadline}\n<:Gap:1239281994245083217>`,
+          inline: true
+        },
+        {
+          name: '<:title:1241292941117493278> **Job Type**',
+          value: `<:angle:1241292943818493962> ${job_category}\n<:Gap:1239281994245083217>`,
+          inline: false
         },
       ],
       thumbnail: {

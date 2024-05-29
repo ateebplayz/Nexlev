@@ -62,6 +62,19 @@ export interface Review {
     review: string,
     stars: number
 }
+export interface ReviewDB {
+    id: string,
+    reviewer: {
+        userId: string,
+        userTag: string,
+    },
+    freelancer: {
+        userId: string,
+        userTag: string,
+    }
+    review: string,
+    stars: number
+}
 
 export interface User {
     userId: string,

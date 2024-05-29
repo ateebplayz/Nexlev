@@ -1,6 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, DMChannel, ModalBuilder, ModalSubmitInteraction, TextChannel, TextInputBuilder, TextInputStyle } from "discord.js"
 import { InfoEmbed } from "../modules/embeds"
 import { channels } from ".."
+import { getReview } from "../modules/db"
 
 export const data = {
     customId: 'btn_review_verify',
@@ -28,11 +29,11 @@ export async function execute(interaction: ButtonInteraction) {
     const filter = (i: ModalSubmitInteraction) => i.customId === ('modal_verify_review_'+interaction.id)
     await interaction.awaitModalSubmit({filter: filter, time: 600000}).then(async (mI) => {
         await mI.deferReply({ephemeral: true})
-
-        const reviewerId = interaction.message.embeds[0].fields[0].value
-        const reviewerTag = interaction.message.embeds[0].fields[1].value
-        const reviewerStars = Number(interaction.message.embeds[0].fields[2].value)
-        const reviewerReview = interaction.message.embeds[0].fields[3].value
+        const review = await getReview(interaction.message.embeds[0].footer?.text || '')
+        const reviewerId = review.reviewer.userId
+        const reviewerTag = review.reviewer.userTag
+        const reviewerStars = review.stars
+        const reviewerReview = review.review
 
         const scope = mI.fields.getTextInputValue('text_review_scope')
         pp = mI.fields.getTextInputValue('text_review_pp')
@@ -51,7 +52,7 @@ export async function execute(interaction: ButtonInteraction) {
             {name: '<:flecha113:1239895323594457149> Freelancer Scope', value: scope, inline: true},
             {name: '<:flecha113:1239895323594457149> Freelancer Payment Proof', value: pp, inline: true},
             {name: '<:flecha113:1239895323594457149> Freelancer Contract/Agreement', value: cp, inline: true},
-        )
+        ).setFooter({text: review.id})
         const buttonApprove = new ButtonBuilder().setCustomId('btn_review_approve').setLabel('Approve').setStyle(ButtonStyle.Success)
         const buttonReject = new ButtonBuilder().setCustomId('btn_review_reject').setLabel('Reject').setStyle(ButtonStyle.Danger)
         const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(buttonApprove, buttonReject)

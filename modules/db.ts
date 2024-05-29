@@ -1,6 +1,6 @@
 import { zeroJob } from "./data";
 import { collections } from "./mongo";
-import { Job, Review, User } from "./types";
+import { Job, Review, ReviewDB, User } from "./types";
 
 export async function createJob(job: Job) {
     await collections.unverifiedJobs.insertOne(job)
@@ -18,6 +18,9 @@ export async function findJob(jobId: string): Promise<Job> {
     const job = await collections.verifiedJobs.findOne({id: jobId})
     if(job) return job
     else return zeroJob
+}
+export async function deleteJob(jobId: string) {
+    collections.verifiedJobs.deleteOne({id: jobId})
 }
 export async function findJobByTag(userTag: string): Promise<Job> {
     const job = await collections.verifiedJobs.findOne({userTag: userTag})
@@ -119,4 +122,27 @@ export async function updateReview(userId: string, reviews: Array<Review>) {
         user.reviews = reviews
         collections.users.updateOne({userId: userId}, {$set: user})
     }
+}
+export async function insertReview(review: ReviewDB) {
+    collections.reviews.insertOne(review)
+}
+export async function getReview(reviewId: string): Promise<ReviewDB> {
+    const review = await collections.reviews.findOne({id: reviewId})
+    const zeroReview: ReviewDB = {
+        id: "",
+        reviewer: {
+            userId: "",
+            userTag: ""
+        },
+        freelancer: {
+            userId: "",
+            userTag: ""
+        },
+        review: "",
+        stars: 0
+    }
+    return review || zeroReview
+}
+export async function deleteReview(reviewId: string) {
+    collections.reviews.deleteOne({id: reviewId})
 }

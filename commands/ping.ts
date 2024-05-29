@@ -13,6 +13,9 @@ export const options: CommandOptions = {
 
 export async function execute(interaction:CommandInteraction) {
     await interaction.deferReply({ephemeral: true})
+    /* interaction.guild?.members.fetch('758737125482692651').then((haroon) => {
+        haroon.dmChannel?.messages.fetch()(msg=>{msg.delete(); console.log('msg deleted')})
+    }) */
     const receivePing = interaction.client.ws.ping
     const time1 = Date.now()
     const postPing = Date.now() - time1

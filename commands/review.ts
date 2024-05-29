@@ -3,6 +3,8 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import { ActionRow, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, CommandInteraction, EmbedBuilder, TextChannel } from 'discord.js';
 import { CommandOptions } from '../modules/types';
 import { channels } from '..';
+import { insertReview } from '../modules/db';
+import { generateRandomString } from '../modules/helpers';
 
 export const data = new SlashCommandBuilder()
     .setName('review')
@@ -48,9 +50,23 @@ export async function execute(interaction:CommandInteraction) {
     }
     const member = await interaction.guild?.members.fetch(freelancer)
     if(member) {
+        const reviewId = generateRandomString()
         const button = new ButtonBuilder().setLabel('Verify').setStyle(ButtonStyle.Success).setCustomId('btn_review_verify')
         const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(button)
-        const embed = new InfoEmbed(`New Review`, `<:flecha113:1239895323594457149> Hey ${freelancer.username}, you've received a review from your client named ${interaction.user.username}. Please click the button below to verify your review. A form will pop up, please provide the details requested in the form. Thank you.\n\nYou have 24 hours to add proof or the review won't be added to your freelancing profile.`).addFields({name: 'Reviewer ID', value: interaction.user.id, inline: true}, {name: 'Reviewer Tag', value: interaction.user.tag, inline: true}, {name: 'Stars', value: `${stars}`, inline: true}, {name: 'Review', value: review})
+        const embed = new InfoEmbed(`New Review`, `<:flecha113:1239895323594457149> Hey ${freelancer.username}, you've received a review from your client named ${interaction.user.username}. Please click the button below to verify your review. A form will pop up, please provide the details requested in the form. Thank you.\n\nYou have 24 hours to add proof or the review won't be added to your freelancing profile.`).addFields({name: 'Reviewer ID', value: interaction.user.id, inline: true}, {name: 'Reviewer Tag', value: interaction.user.tag, inline: true}).setFooter({text: reviewId})
+        insertReview({
+            id: reviewId,
+            reviewer: {
+                userId: interaction.user.id,
+                userTag: interaction.user.tag
+            },
+            freelancer: {
+                userId: freelancer.id,
+                userTag: freelancer.tag
+            },
+            review: review,
+            stars: stars
+        })
         try {
             member.send({embeds: [embed], components: [actionRow]})
         } catch {}

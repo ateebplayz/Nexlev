@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ButtonInteraction, ModalBuilder, ModalSubmitInteraction, TextInputBuilder, TextInputStyle } from "discord.js"
-import { rejectJob } from "../modules/db"
+import { deleteReview, rejectJob } from "../modules/db"
 import { ErrorEmbed } from "../modules/embeds"
 
 export const data = {
@@ -25,6 +25,7 @@ export async function execute(interaction: ButtonInteraction) {
                 } catch {}
             }
         }
+        deleteReview(interaction.message.embeds[0].footer?.text || '')
         if(interaction.message.deletable) interaction.message.delete()
     })
     return

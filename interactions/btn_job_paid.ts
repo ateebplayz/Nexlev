@@ -13,10 +13,10 @@ export async function execute(interaction: ButtonInteraction) {
     console.log('a')
     // Creating Text Input Fields
     const text_job_title = new TextInputBuilder().setCustomId('text_job_title').setLabel('Job Title').setMaxLength(50).setMinLength(3).setPlaceholder('What is this Job about?').setRequired(true).setStyle(TextInputStyle.Short)
-    const text_job_desc = new TextInputBuilder().setCustomId('text_job_desc').setLabel('Job Description').setMaxLength(1000).setMinLength(3).setPlaceholder('Please share the Job details such as requirements, experience, or any skills needed.').setRequired(true).setStyle(TextInputStyle.Paragraph)
+    const text_job_desc = new TextInputBuilder().setCustomId('text_job_desc').setLabel('Job Description').setMaxLength(500).setMinLength(3).setPlaceholder('Please share the Job details such as requirements, experience, or any skills needed.').setRequired(true).setStyle(TextInputStyle.Paragraph)
     const text_job_budget = new TextInputBuilder().setCustomId('text_job_budget').setLabel('Job Budget').setMaxLength(50).setMinLength(3).setPlaceholder('What is the budget for this Job?').setRequired(true).setStyle(TextInputStyle.Short)
     const text_job_deadline = new TextInputBuilder().setCustomId('text_job_deadline').setLabel('Job Deadline').setMaxLength(50).setMinLength(3).setPlaceholder('Enter a deadline for this Job. If you do not have any, type n/a').setStyle(TextInputStyle.Paragraph).setRequired(false)
-    const text_job_ref = new TextInputBuilder().setCustomId('text_job_ref').setLabel('Job Reference').setMaxLength(1000).setMinLength(3).setPlaceholder('Please provide any reference examples for the job. You can use any URL as a reference.').setRequired(true).setStyle(TextInputStyle.Paragraph)
+    const text_job_ref = new TextInputBuilder().setCustomId('text_job_ref').setLabel('Job Reference').setMaxLength(150).setMinLength(3).setPlaceholder('Please provide any reference examples for the job. You can use any URL as a reference.').setRequired(true).setStyle(TextInputStyle.Paragraph)
     const textInputs = [text_job_title, text_job_desc, text_job_budget, text_job_deadline, text_job_ref]
     const modal = new ModalBuilder().setCustomId('modal_job_paid_'+interaction.id).setTitle('Post a Paid Job')
 
@@ -30,7 +30,7 @@ export async function execute(interaction: ButtonInteraction) {
     if(interaction.customId.endsWith('vf')) job_type = 'VFX'
     if(interaction.customId.endsWith('th')) job_type = 'Thumbnail'
     if(interaction.customId.endsWith('vi')) job_type = 'Video'
-    let msg: Message<boolean> | undefined
+    let msg: Message<boolean> | undefined   
     let job_title = ""
     let job_desc = ""
     let job_budget = ""
@@ -85,7 +85,7 @@ export async function execute(interaction: ButtonInteraction) {
             switch(job_type) {
                 case 'Writing':
                     let msg = await (channels.paidWriting as ForumChannel).threads.create({name: job_title, message: {embeds: [embed], components: [actionRow]}})
-                    msg.send({components: [messageActionRow], content: `👉  Bump your post by clicking on the 'Bump' button, it will boost your post's visibility.`})
+                    // msg.send({components: [messageActionRow], content: `👉  Bump your post by clicking on the 'Bump' button, it will boost your post's visibility.`})
                     const job: Job = {
                         id: jobId,
                         userId: bI.user.id,

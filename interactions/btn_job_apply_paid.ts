@@ -41,11 +41,11 @@ export async function execute(interaction: ButtonInteraction) {
             (await client.guilds.fetch('1236733198491324537')).members.fetch(job.userId).then((user: GuildMember)=>{
                 user.send({embeds: [
                     {
-                      "description": `**Freelancer ID:** (<@!${mi.user.id}>) - ${mi.user.id}\n\n**Applying For** : ${job.title}\n\n**Proposal:** ${text_job_text_input}\n\n**Portfolio Link:** ${text_job_portfolio_input}`,
-                      "color": 0x1b9ee6,
-                      "thumbnail": {
-                        "url": mi.user.avatarURL() || ''
-                      }
+                        "description": `**Freelancer ID:** (<@!${mi.user.id}>) - ${mi.user.id}\n\n**Applying For** : ${job.title}\n\n**Proposal:** ${text_job_text_input}\n\n**Portfolio Link:** ${text_job_portfolio_input}`,
+                        "color": 0x1b9ee6,
+                        "thumbnail": {
+                            "url": mi.user.avatarURL() || ''
+                        }
                     }
                   ], components: [actionRow]})
             })

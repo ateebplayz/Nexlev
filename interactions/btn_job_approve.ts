@@ -26,7 +26,7 @@ export async function execute(interaction: ButtonInteraction) {
     const bumpButton = new ButtonBuilder().setCustomId('btn_job_bump').setLabel('Bump').setStyle(ButtonStyle.Primary).setEmoji('🚀')
     const messageActionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(bumpButton)
     const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(applyButton, reportButton, reviewsButton)
-    const embed = getAdEmbed(job.title, job.description, job.budget, job.deadline, member?.avatarURL() || null, job.id)
+    const embed = getAdEmbed(job.title, job.description, job.budget, job.deadline, member?.avatarURL() || '', job.id)
     switch(job.skill) {
         case 'Writing':
             let msg = await (channels.hireWriting as ForumChannel).threads.create({name: job.title, message: {embeds: [embed], components: [actionRow]}})

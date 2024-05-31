@@ -2,7 +2,7 @@ import { InfoEmbed } from '../modules/embeds';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { APIEmbed, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, CommandInteraction } from 'discord.js';
 import { CommandOptions } from '../modules/types';
-import { existsUser, getUser } from '../modules/db';
+import { addUser, existsUser, getUser } from '../modules/db';
 import { botColor } from '../modules/data';
 
 export const data = new SlashCommandBuilder()
@@ -17,8 +17,19 @@ export const options: CommandOptions = {
 export async function execute(interaction:CommandInteraction) {
     await interaction.deferReply({ephemeral: true})
     const user = (interaction as ChatInputCommandInteraction).options.getUser('freelancer', true)
+    let exists = await existsUser(user.id)
+    if(!exists) {
+        addUser(
+            {
+                userId: user.id,
+                userTag: user.tag,
+                skills: [],
+                reviews: []
+            }
+        )
+        exists = true
+    }
     if(user) {
-        const exists = await existsUser(user.id)
 
         if(exists) {
             const userDb = await getUser(user.id)

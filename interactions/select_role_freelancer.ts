@@ -15,7 +15,7 @@ export async function execute(interaction: StringSelectMenuInteraction) {
     const videoRole = await member.guild.roles.fetch('1240766033506078891')
     const vfxRole = await member.guild.roles.fetch('1240766032130347158')
     const thumbnailRole = await member.guild.roles.fetch('1240765963272716390')
-    interaction.values.forEach(async value => {
+    interaction.values.map(async value => {
         if(value == 'writing') {
             if(writingRole)
             member.roles.add(writingRole)
@@ -58,6 +58,6 @@ export async function execute(interaction: StringSelectMenuInteraction) {
     })
     const button = new ButtonBuilder().setCustomId('btn_role_freelancer_confirm').setLabel('Confirm').setStyle(ButtonStyle.Success)
     const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(button)
-    interaction.reply({content: `The bot has given you the skills role. Please confirm this last step. Have you created your nexlev.io portfolio? If yes, click confirm. If not, go to Nexlev.io, create a portfolio, and click on confirm. Thank you.`, components: [actionRow], ephemeral: true})
+    interaction.reply({content: `The bot has given you the skills role. Please confirm this last step. Have you created your nexlev.io portfolio? If yes, click confirm. If not, go to Nexlev.io/freelancer, create a portfolio, and click on confirm. Thank you.`, components: [actionRow], ephemeral: true})
     return
 }

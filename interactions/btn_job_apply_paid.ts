@@ -30,7 +30,7 @@ export async function execute(interaction: ButtonInteraction) {
     await interaction.awaitModalSubmit({filter: star_wars, time: 6000_00}).then(async (mi)=>{
         const text_job_portfolio_input = mi.fields.getTextInputValue('text_job_portfolio')
         if(!text_job_portfolio_input.startsWith('http')) {
-            return mi.reply({content: `You must have your portfolio link starting with "http" or "https." For a free portfolio, create now on nexlev.io.`, ephemeral: true})
+            return mi.reply({content: `You must have your portfolio link starting with "http" or "https." For a free portfolio, create now on nexlev.io/freelancer.`, ephemeral: true})
         }
         const text_job_text_input = mi.fields.getTextInputValue('text_job_text')
         const delete_button = new ButtonBuilder().setCustomId('btn_delete').setLabel('Reject This Proposal').setStyle(ButtonStyle.Danger)

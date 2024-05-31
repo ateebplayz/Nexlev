@@ -64,7 +64,7 @@ export async function execute(interaction: ButtonInteraction) {
         job_portfolio = mI.fields.getTextInputValue('text_gig_budget')
         job_method = mI.fields.getTextInputValue('text_gig_deadline')
         if(!job_portfolio.startsWith('http')) {
-            return mI.editReply({content: `You must have your portfolio link starting with "http" or "https." For a free portfolio, create now on nexlev.io.`})
+            return mI.editReply({content: `You must have your portfolio link starting with "http" or "https." For a free portfolio, create now on nexlev.io/freelancer.`})
         }
         const confirmButton = new ButtonBuilder().setCustomId('btn_confirm_job_paid').setLabel('Confirm').setStyle(ButtonStyle.Success)
         const cancelButton = new ButtonBuilder().setCustomId('btn_cancel_job_paid').setLabel('Cancel').setStyle(ButtonStyle.Danger)

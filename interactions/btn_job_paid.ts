@@ -69,11 +69,15 @@ export async function execute(interaction: ButtonInteraction) {
                     if(m){
                         m.send({embeds: [
                             {
-                              "title": "<:flecha113:1239895323594457149> Few Instructions:",
-                              "description": "<:Gap:1239281994245083217>\n- Freelancers will send proposals related to your job post in your DMs. You can review them and contact your preferred freelancer directly through DMs. The freelancer ID is provided in the proposal message. If you're not satisfied with the proposal or portfolio, you can simply click the reject button.\n\n- If you don't want to hire someone now or want to remove your job post, Write this command in the server any channel /post-delete (id) to remove it. Typically, every job post auto-closes after 4 days.",
-                              "color": 0x1b9ee6
+                                "title": "<:flecha113:1239895323594457149> Few Instructions:",
+                                "description": "<:Gap:1239281994245083217>\n- Freelancers will send proposals related to your job post in your DMs. You can review them and contact your preferred freelancer directly through DMs. The freelancer ID is provided in the proposal message. If you're not satisfied with the proposal or portfolio, you can simply click the reject button.\n\n- If you don't want to hire someone now or want to remove your job post, Write this command in the server any channel /post-delete (id) to remove it. Typically, every job post auto-closes after 4 days.",
+                                "color": 0x1b9ee6,
                             }
-                          ]})
+                        ]}).then((msg) => {
+                            setTimeout(()=>{
+                                msg.delete()
+                            }, 60*60*1000*6)
+                        })
                     }
                 })
             } catch {}

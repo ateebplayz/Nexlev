@@ -22,7 +22,9 @@ export async function execute(interaction: ButtonInteraction) {
                 try {
                     const embed = new ErrorEmbed('Post Rejected', `Your post **${job.title}** has been Rejected!`).addFields({name: "Administrator's Reason", value: reason})
                     member.send({embeds: [embed]})
-                } catch {}
+                } catch (e) {
+                    console.log(e)
+                }
             }
         }
         deleteReview(interaction.message.embeds[0].footer?.text || '')

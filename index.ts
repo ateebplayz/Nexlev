@@ -26,6 +26,8 @@ interface Channels {
     logWarn: discord.Channel | undefined | null
     logMessage: discord.Channel | undefined | null
     logBump: discord.Channel | undefined | null
+    logDeletion: discord.Channel | undefined | null
+    logReview: discord.Channel | undefined | null
 
     reviewVerif: discord.Channel | undefined | null
 }
@@ -46,6 +48,8 @@ export let channels: Channels = {
     logWarn: null,
     logMessage: null,
     logBump: null,
+    logDeletion: null,
+    logReview: null,
     reviewVerif: null
 }
 
@@ -255,6 +259,8 @@ client.once('ready', async (readyClient) => {
     channels.logWarn = readyClient.channels.cache.get('1237846573367693473')
     channels.logMessage = readyClient.channels.cache.get('1237845741574164530')
     channels.logBump = readyClient.channels.cache.get('1240966428362936421')
+    channels.logDeletion = readyClient.channels.cache.get('1245363116599021588')
+    channels.logReview = readyClient.channels.cache.get('1264616357446815896')
     
     channels.reviewVerif = readyClient.channels.cache.get('1242542393455017994')
     console.log(chalk.bold(chalk.green('Bot is ready to go.\n\n')) + `${chalk.bold('Client ID')} : ${process.env.CLIENTID}\n${chalk.bold('Client Username')} : ${readyClient.user.username}`)

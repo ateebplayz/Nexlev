@@ -31,6 +31,7 @@ export async function execute(interaction: ButtonInteraction) {
         case 'Writing':
             let msg = await (channels.hireWriting as ForumChannel).threads.create({name: job.title, message: {embeds: [embed], components: [actionRow]}})
             updateMessage(job.id, msg.id, msg.url)
+            if(job.jobType !== 'Paid')
             msg.send({components: [messageActionRow], content: `👉  Bump your post by clicking on the 'Bump' button, it will boost your post's visibility.`})
             const logEmbed = new InfoEmbed('New Approval', `**Job Moderator ID** : ${interaction.user.id}\n**Job Moderator Tag** : ${interaction.user.tag}\n**Job Link** : ${msg.url}`);
             (channels.logApproval as TextChannel).send({embeds: [logEmbed,embed]})
@@ -39,6 +40,7 @@ export async function execute(interaction: ButtonInteraction) {
             let ping2 = `**Job Notification:** <@&1240765963272716390>`
             let msg2 = await (channels.hireThumbnail as ForumChannel).threads.create({name: job.title, message: {embeds: [embed], components: [actionRow]}})
             updateMessage(job.id, msg2.id, msg2.url)
+            if(job.jobType !== 'Paid')
             msg2.send({components: [messageActionRow], content: `👉  Bump your post by clicking on the 'Bump' button, it will boost your post's visibility.`})
             const logEmbed2 = new InfoEmbed('New Approval', `**Job Moderator ID** : ${interaction.user.id}\n**Job Moderator Tag** : ${interaction.user.tag}\n**Job Link** : ${msg2.url}`);
             (channels.logApproval as TextChannel).send({embeds: [logEmbed2,embed]})
@@ -47,6 +49,7 @@ export async function execute(interaction: ButtonInteraction) {
             let ping3 = `**Job Notification:** <@&1240766032130347158>`
             let msg3 = await (channels.hireVfx as ForumChannel).threads.create({name: job.title, message: {embeds: [embed], components: [actionRow]}})
             updateMessage(job.id, msg3.id, msg3.url)
+            if(job.jobType !== 'Paid')
             msg3.send({components: [messageActionRow], content: `👉  Bump your post by clicking on the 'Bump' button, it will boost your post's visibility.`})
             const logEmbed3 = new InfoEmbed('New Approval', `**Job Moderator ID** : ${interaction.user.id}\n**Job Moderator Tag** : ${interaction.user.tag}\n**Job Link** : ${msg3.url}`);
             (channels.logApproval as TextChannel).send({embeds: [logEmbed3,embed]})
@@ -55,6 +58,7 @@ export async function execute(interaction: ButtonInteraction) {
             let ping4 = `**Job Notification:** <@&1240766033506078891>`
             let msg4 = await (channels.hireVideo as ForumChannel).threads.create({name: job.title, message: {embeds: [embed], components: [actionRow]}})
             updateMessage(job.id, msg4.id, msg4.url)
+            if(job.jobType !== 'Paid')
             msg4.send({components: [messageActionRow], content: `👉  Bump your post by clicking on the 'Bump' button, it will boost your post's visibility.`})
             
             const logEmbed4 = new InfoEmbed('New Approval', `**Job Moderator ID** : ${interaction.user.id}\n**Job Moderator Tag** : ${interaction.user.tag}\n**Job Link** : ${msg4.url}`);
@@ -64,6 +68,7 @@ export async function execute(interaction: ButtonInteraction) {
             let ping5 = `**Job Notification:** <@&1240765855135174798>`;
             let msg5 = await (channels.hireVoice as ForumChannel).threads.create({name: job.title, message: {embeds: [embed], components: [actionRow]}})
             updateMessage(job.id, msg5.id, msg5.url)
+            if(job.jobType !== 'Paid')
             msg5.send({components: [messageActionRow], content: `👉  Bump your post by clicking on the 'Bump' button, it will boost your post's visibility.`})
             
             const logEmbed5 = new InfoEmbed('New Approval', `**Job Moderator ID** : ${interaction.user.id}\n**Job Moderator Tag** : ${interaction.user.tag}\n**Job Link** : ${msg5.url}`);

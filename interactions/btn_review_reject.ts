@@ -1,5 +1,6 @@
-import { ActionRowBuilder, ButtonInteraction, ModalBuilder, ModalSubmitInteraction, TextInputBuilder, TextInputStyle } from "discord.js"
-import { ErrorEmbed } from "../modules/embeds"
+import { ActionRowBuilder, ButtonInteraction, ModalBuilder, ModalSubmitInteraction, TextChannel, TextInputBuilder, TextInputStyle } from "discord.js"
+import { ErrorEmbed, InfoEmbed } from "../modules/embeds"
+import { channels } from ".."
 
 export const data = {
     customId: 'btn_review_reject',
@@ -20,6 +21,43 @@ export async function execute(interaction: ButtonInteraction) {
                     new ErrorEmbed(`Review Rejected`, `Your review from ${interaction.message.embeds[0].fields[1].value} has been rejected.`).addFields({name: 'Reason', value: mI.fields.getTextInputValue('text_reject_reason')})
                 ]
             })
+        }
+        const reviewerId = interaction.message.embeds[0].fields[0].value
+        const reviewerTag = interaction.message.embeds[0].fields[1].value
+        const reviewerReview = interaction.message.embeds[0].fields[3].value
+        const reviewerStars = interaction.message.embeds[0].fields[2].value
+        const freelancerId = interaction.message.embeds[0].fields[4].value
+        const message = new InfoEmbed('Review Rejected', `The review from <@!${reviewerId}> was rejected`).addFields(
+            {
+                name: 'Reviewer Tag',
+                value: reviewerTag,
+                inline: true
+            },
+            {
+                name: 'Reviewer Stars',
+                value: reviewerStars,
+                inline: true
+            },
+            {
+                name: 'Freelancer ID',
+                value: freelancerId,
+                inline: true
+            },
+            {
+                name: 'Review',
+                value: reviewerReview,
+                inline: false
+            },
+            {
+                name: 'Reason',
+                value: mI.fields.getTextInputValue('text_reject_reason'),
+                inline: false
+            },
+        )
+        try {
+            (channels.logReview as TextChannel).send({embeds: [message]})
+        } catch (err) {
+            console.log(err)
         }
         mI.reply({content: `Successfully rejected review.`, ephemeral: true})
         interaction.message.delete()

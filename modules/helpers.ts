@@ -1,10 +1,10 @@
 import { APIEmbed } from "discord.js";
 
-export function getJobEmbed(job_title: string, job_desc: string, job_budget: string, job_ref: string, job_deadline: string, job_client_tag: string, job_avatar_uri: string | null, job_id:string): APIEmbed {
+export function getJobEmbed(job_title: string, job_desc: string, job_budget: string, job_ref: string, job_deadline: string, job_client_tag: string, job_avatar_uri: string | null, job_id:string, deletion?: boolean): APIEmbed {
   return {
       title: `<:title:1241292941117493278> ${job_title}`,
       description: `<:Gap:1239281994245083217>\n<:description:1241292933056167936> **Description**\n<:angle:1241292943818493962> ${job_desc}\n<:Gap:1239281994245083217>`,
-      color: 0x1b9ee6,
+      color: deletion ? 0xff1111 : 0x1b9ee6,
       fields: [
         {
           name: '<:budget:1241292938248458240> **Budget**',

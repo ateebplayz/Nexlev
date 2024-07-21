@@ -5,6 +5,7 @@ import { CommandOptions } from '../modules/types';
 import discord from 'discord.js'
 import { deleteJob, findJob, searchJob } from '../modules/db';
 import { channels } from '..';
+import { getJobEmbed } from '../modules/helpers';
 
 export const data = new SlashCommandBuilder()
     .setName('delete-post')
@@ -46,13 +47,19 @@ export async function execute(interaction:CommandInteraction) {
                     else channel = channels.hireVoice
                     break
             }
-            (channel as ForumChannel).threads.fetch(postData.message.id).then((thread) => {
-                try {
-                    thread?.delete()
-                } catch {
+            try {
+                (channel as ForumChannel).threads.fetch(postData.message.id).then((thread) => {
+                    try {
+                        thread?.delete()
+                    } catch {
 
-                }
-            })
+                    }
+                })
+                const jobEmbed = getJobEmbed(postData.title, postData.description, postData.budget, postData.reference, postData.deadline, postData.userTag, null, postData.id, true);
+                (channels.logDeletion as TextChannel).send({embeds: [jobEmbed]})
+            } catch (e) {
+                console.log(e)
+            }
             deleteJob(postId)
             return interaction.editReply({content: `Your post has been successfully deleted.`})
         } else {

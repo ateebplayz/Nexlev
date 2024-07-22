@@ -88,7 +88,7 @@ export async function execute(interaction: ButtonInteraction) {
                 const buttonApprove = new ButtonBuilder().setCustomId('btn_job_approve').setLabel('Approve').setStyle(ButtonStyle.Success)
                 const buttonReject = new ButtonBuilder().setCustomId('btn_job_reject').setLabel('Reject').setStyle(ButtonStyle.Danger)
                 const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(buttonApprove, buttonReject)
-                  const msg = await (channels.dashboard as TextChannel).send({embeds: [getAdEmbedCat(job_title, job_desc, job_portfolio, job_method, bI.user.avatarURL(), jobId, job_type)], components: [actionRow]})          
+                  const msg = await (channels.dashboard as TextChannel).send({content: "<@&1264900210996412577>", embeds: [getAdEmbedCat(job_title, job_desc, job_portfolio, job_method, bI.user.avatarURL(), jobId, job_type)], components: [actionRow]})          
                     const job: Job = {
                         id: jobId,
                         userId: bI.user.id,

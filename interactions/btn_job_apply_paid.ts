@@ -41,7 +41,7 @@ export async function execute(interaction: ButtonInteraction) {
             (await client.guilds.fetch('1236733198491324537')).members.fetch(job.userId).then((user: GuildMember)=>{
                 user.send({embeds: [
                     {
-                        "description": `**Freelancer Username:** ${mi.user.tag}\nYou can copy this freelancer Discord ID, send him a friend request, and contact him through DMs.\n\n**Applying For** : ${job.title}\n\n**Proposal:** ${text_job_text_input}\n\n**Portfolio Link:** ${text_job_portfolio_input}`,
+                        "description": `**Freelancer Discord ID:** ${mi.user.tag}\n\nYou can copy this freelancer Discord ID, send him a friend request, and contact him through DMs.\n\n**Applying For** : ${job.title}\n\n**Proposal:** ${text_job_text_input}\n\n**Portfolio Link:** ${text_job_portfolio_input}`,
                         "color": 0x1b9ee6,
                         "thumbnail": {
                             "url": mi.user.avatarURL() || ''

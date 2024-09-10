@@ -246,29 +246,29 @@ client.once('ready', async (readyClient) => {
         }],
         status: 'online',
     })
-    channels.dashboard = readyClient.channels.cache.get('1279151232531042442')
-    channels.paidWriting = readyClient.channels.cache.get('1281165118138224662')
-    channels.paidVoice = readyClient.channels.cache.get('1281165132654972980')
-    channels.paidThumbnail = readyClient.channels.cache.get('1281165151013306369')
-    channels.paidVideo = readyClient.channels.cache.get('1281165165097652315')
+    channels.dashboard = readyClient.channels.cache.get('1237835745322991689')
+    channels.paidWriting = readyClient.channels.cache.get('1237158208800555028')
+    channels.paidVoice = readyClient.channels.cache.get('1237159237705007164')
+    channels.paidThumbnail = readyClient.channels.cache.get('1237159736088985710')
+    channels.paidVideo = readyClient.channels.cache.get('1237159528676458599')
     channels.paidVfx = readyClient.channels.cache.get('1237160166219059200')
-    channels.reportLog = readyClient.channels.cache.get('1279151233017450597')
-    channels.reportCLog = readyClient.channels.cache.get('1282329494375370797')
+    channels.reportLog = readyClient.channels.cache.get('1237835829104218185')
+    channels.reportCLog = readyClient.channels.cache.get('1283053586720227359')
 
-    channels.hireWriting = readyClient.channels.cache.get('1281165211897696317')
-    channels.hireVoice = readyClient.channels.cache.get('1281165212119990315')
-    channels.hireThumbnail = readyClient.channels.cache.get('1281165270345318400')
-    channels.hireVideo = readyClient.channels.cache.get('1281165294278279261')
-    channels.hireVfx = readyClient.channels.cache.get('1281165311898423306')
+    channels.hireWriting = readyClient.channels.cache.get('1237160760896131143')
+    channels.hireVoice = readyClient.channels.cache.get('1237160715429875803')
+    channels.hireThumbnail = readyClient.channels.cache.get('1237160651592437790')
+    channels.hireVideo = readyClient.channels.cache.get('1237160602540179487')
+    channels.hireVfx = readyClient.channels.cache.get('1237160431706181642')
     
-    channels.logApproval = readyClient.channels.cache.get('1279151233482887250')
-    channels.logWarn = readyClient.channels.cache.get('1279151233482887251')
-    channels.logMessage = readyClient.channels.cache.get('1279151233482887252')
-    channels.logBump = readyClient.channels.cache.get('1279151233482887254')
-    channels.logDeletion = readyClient.channels.cache.get('1279151233482887255')
-    channels.logReview = readyClient.channels.cache.get('1279151234208763975')
+    channels.logApproval = readyClient.channels.cache.get('1237846323819188315')
+    channels.logWarn = readyClient.channels.cache.get('1237846573367693473')
+    channels.logMessage = readyClient.channels.cache.get('1237845741574164530')
+    channels.logBump = readyClient.channels.cache.get('1240966428362936421')
+    channels.logDeletion = readyClient.channels.cache.get('1245363116599021588')
+    channels.logReview = readyClient.channels.cache.get('1264616357446815896')
     
-    channels.reviewVerif = readyClient.channels.cache.get('1279151232531042443')
+    channels.reviewVerif = readyClient.channels.cache.get('1242542393455017994')
     console.log(chalk.bold(chalk.green('Bot is ready to go.\n\n')) + `${chalk.bold('Client ID')} : ${process.env.CLIENTID}\n${chalk.bold('Client Username')} : ${readyClient.user.username}`)
     
     setInterval(async () => {
@@ -331,7 +331,7 @@ client.once('ready', async (readyClient) => {
             }
             console.log(`${job.id} ${days}`)
         })
-    }, 3600000);
+    }, 360000);
 })
 const run = () => {
     mongoClient.connect().then(()=>{console.log(chalk.cyan(chalk.bold('Connected To MongoDB Database')))})

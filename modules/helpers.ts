@@ -1,6 +1,6 @@
 import { APIEmbed } from "discord.js";
 
-export function getJobEmbed(job_title: string, job_desc: string, job_budget: string, job_ref: string, job_deadline: string, job_client_tag: string, job_avatar_uri: string | null, job_id:string, deletion?: boolean): APIEmbed {
+export function getJobEmbed(job_title: string, job_desc: string, job_budget: string, job_ref: string, job_deadline: string, job_client_tag: string, job_avatar_uri: string | null, job_id:string, deletion?: boolean, job_client_id?: string): APIEmbed {
   return {
       title: `<:title:1241292941117493278> ${job_title}`,
       description: `<:Gap:1239281994245083217>\n<:description:1241292933056167936> **Description**\n<:angle:1241292943818493962> ${job_desc}\n<:Gap:1239281994245083217>`,
@@ -13,7 +13,7 @@ export function getJobEmbed(job_title: string, job_desc: string, job_budget: str
         },
         {
           name: '<:title:1241292941117493278> **Client**',
-          value: `<:angle:1241292943818493962> ${job_client_tag}\n<:Gap:1239281994245083217>`,
+          value: `<:angle:1241292943818493962> ${job_client_tag} ${job_client_id ? `(${job_client_id})` : ''}\n<:Gap:1239281994245083217>`,
           inline: true
         },
         {

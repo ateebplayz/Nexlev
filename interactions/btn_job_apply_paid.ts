@@ -13,9 +13,9 @@ export async function execute(interaction: ButtonInteraction) {
     if(interaction.user.id == job.userId) {
         return interaction.reply({content: `You cannot submit a proposal for your own job.`, ephemeral: true})
     }
-    if(job.proposals.includes(interaction.user.id)) {
+    /* if(job.proposals.includes(interaction.user.id)) {
         return interaction.reply({content: `You've already applied to this post once.`, ephemeral: true})
-    }
+    } */
     console.log(job, tag)
     const text_job_portfolio = new TextInputBuilder().setCustomId('text_job_portfolio').setLabel('Portfolio').setStyle(TextInputStyle.Short).setPlaceholder('Please share your Nexlev portfolio link.').setRequired(true).setMaxLength(100)
     const text_job_text = new TextInputBuilder().setCustomId('text_job_text').setLabel('Submit Your Proposal to the Client').setStyle(TextInputStyle.Paragraph).setPlaceholder("Share why you're perfect for the job by providing specific details and information about your work.").setRequired(true).setMaxLength(1000)
@@ -33,23 +33,34 @@ export async function execute(interaction: ButtonInteraction) {
             return mi.reply({content: `You must have your portfolio link starting with "http" or "https." For a free portfolio, create now on nexlev.io/freelancer.`, ephemeral: true})
         }
         const text_job_text_input = mi.fields.getTextInputValue('text_job_text')
-        const delete_button = new ButtonBuilder().setCustomId('btn_delete').setLabel('Reject This Proposal').setStyle(ButtonStyle.Danger)
+        const delete_button = new ButtonBuilder().setCustomId('btn_proposal_delete').setLabel('Reject This Proposal').setStyle(ButtonStyle.Danger)
         addProposal(mi.user.id, job.id)
         mi.reply({content: `Thank you for applying, your application has been sent to the client`, ephemeral: true})
         const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(delete_button)
         try {
-            (await client.guilds.fetch('1236733198491324537')).members.fetch(job.userId).then((user: GuildMember)=>{
+            (await client.guilds.fetch(interaction.guildId || '1236733198491324537')).members.fetch(job.userId).then((user: GuildMember)=>{
                 user.send({embeds: [
                     {
-                        "description": `**Freelancer Discord ID:** ${mi.user.tag}\n\nYou can copy this freelancer Discord ID, send him a friend request, and contact him through DMs.\n\n**Applying For** : ${job.title}\n\n**Proposal:** ${text_job_text_input}\n\n**Portfolio Link:** ${text_job_portfolio_input}`,
+                        "description": `**Freelancer Discord ID:** [${mi.user.tag}](https://discordapp.com/users/${mi.user.id})\n\nYou can copy this freelancer Discord ID, send him a friend request, and contact him through DMs.\n\n**Applying For** : ${job.title}\n\n**Proposal:** ${text_job_text_input}\n\n**Portfolio Link:** ${text_job_portfolio_input}`,
                         "color": 0x1b9ee6,
                         "thumbnail": {
                             "url": mi.user.avatarURL() || ''
-                        }
+                        },
+                        "footer": {
+                            "text": mi.user.id
+                        },
+                        "title": job.title
                     }
-                  ], components: [actionRow]})
+                  ], components: [actionRow]}
+                ).then(()=>{
+                    console.log('Proposal sent to ' + user.id)
+                }).catch(e => {
+                    console.log(e)
+                })
             })
-        } catch {}
-    }).catch((e)=>{})
-    return
+        } catch {console.log}
+    }).catch((e)=>{
+        console.log(e)
+    })
+    return      
 }

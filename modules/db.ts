@@ -5,6 +5,10 @@ import { Job, Review, ReviewDB, User } from "./types";
 export async function createJob(job: Job) {
     await collections.unverifiedJobs.insertOne(job)
 }
+export async function getJobs(): Promise<Array<Job>> {
+    const jobs = await collections.verifiedJobs.find().toArray()
+    return jobs
+}
 export async function searchJob(jobId: string): Promise<'Verified' | 'Unverified' | 'None'> {
     if(await collections.verifiedJobs.findOne({id: jobId})) return 'Verified'
         else if (await collections.unverifiedJobs.findOne({id: jobId})) return 'Unverified'

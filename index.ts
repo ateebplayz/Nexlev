@@ -1,10 +1,13 @@
 import chalk from 'chalk'
-import discord, { ActionRow, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js'
+import discord, { ActionRow, ActionRowBuilder, ButtonBuilder, ButtonStyle, ForumChannel, TextChannel } from 'discord.js'
 import dotenv from 'dotenv'
 import fs from 'node:fs'
 import { Command, InteractionHandler, VerifyClient } from './modules/types'
 import { ErrorEmbed, InfoEmbed, RunTimeErrorEmbed } from './modules/embeds'
 import { mongoClient } from './modules/mongo'
+import { deleteJob, getJobs } from './modules/db'
+import { guildId } from './modules/data'
+import { getJobEmbed } from './modules/helpers'
 
 dotenv.config()
 
@@ -16,6 +19,7 @@ interface Channels {
     paidVideo: discord.Channel | undefined | null
     paidVfx: discord.Channel | undefined | null
     reportLog: discord.Channel | undefined | null
+    reportCLog: discord.Channel | undefined | null
     hireWriting: discord.Channel | undefined | null
     hireVoice: discord.Channel | undefined | null
     hireThumbnail: discord.Channel | undefined | null
@@ -44,6 +48,7 @@ export let channels: Channels = {
     paidVideo: null,
     paidVfx: null,
     reportLog: null,
+    reportCLog: null,
     logApproval: null,
     logWarn: null,
     logMessage: null,
@@ -135,14 +140,14 @@ client.on('messageCreate', async (message) => {
             writing: new ButtonBuilder().setCustomId('btn_job_paid_wr').setLabel('Post a Writing Job').setStyle(ButtonStyle.Success).setEmoji('✍️'),
             voice: new ButtonBuilder().setCustomId('btn_job_paid_vo').setLabel('Post a Voice Job').setStyle(ButtonStyle.Success).setEmoji('🎤'),
             video: new ButtonBuilder().setCustomId('btn_job_paid_vi').setLabel('Post a Editing Job').setStyle(ButtonStyle.Success).setEmoji('📷'),
-            vfx: new ButtonBuilder().setCustomId('btn_job_paid_vf').setLabel('Post a VFX/GFX Job').setStyle(ButtonStyle.Success).setEmoji('✨'),
+            vfx: new ButtonBuilder().setCustomId('btn_job_paid_vf').setLabel('Post an Assistant Job').setStyle(ButtonStyle.Success).setEmoji('✨'),
             thumbnail: new ButtonBuilder().setCustomId('btn_job_paid_th').setLabel('Post a Thumbnail Job').setStyle(ButtonStyle.Success).setEmoji('🎨')
         }
         const forHireAds = {
             writing: new ButtonBuilder().setCustomId('btn_job_hire_wr').setLabel('Post a Writing Ad').setStyle(ButtonStyle.Success).setEmoji('✍️'),
             voice: new ButtonBuilder().setCustomId('btn_job_hire_vo').setLabel('Post a Voice Ad').setStyle(ButtonStyle.Success).setEmoji('🎤'),
             video: new ButtonBuilder().setCustomId('btn_job_hire_vi').setLabel('Post a Editing Ad').setStyle(ButtonStyle.Success).setEmoji('📷'),
-            vfx: new ButtonBuilder().setCustomId('btn_job_hire_vf').setLabel('Post a VFX/GFX Ad').setStyle(ButtonStyle.Success).setEmoji('✨'),
+            vfx: new ButtonBuilder().setCustomId('btn_job_hire_vf').setLabel('Post an Assistant Ad').setStyle(ButtonStyle.Success).setEmoji('✨'),
             thumbnail: new ButtonBuilder().setCustomId('btn_job_hire_th').setLabel('Post a Thumbnail Ad').setStyle(ButtonStyle.Success).setEmoji('🎨')
         }
         const actionRows = {
@@ -177,7 +182,7 @@ client.on('messageCreate', async (message) => {
             actor: new ButtonBuilder().setCustomId('btn_role_voice').setLabel('Voice Actor').setEmoji('🎤').setStyle(ButtonStyle.Success),
             thumbnail: new ButtonBuilder().setCustomId('btn_role_thumbnail').setLabel('Thumbnail Design').setEmoji('🎨').setStyle(ButtonStyle.Success),
             video: new ButtonBuilder().setCustomId('btn_role_video').setLabel('Video Editing').setEmoji('📷').setStyle(ButtonStyle.Success),
-            vfx: new ButtonBuilder().setCustomId('btn_role_vfx').setLabel('VFX/GFX').setEmoji('✨').setStyle(ButtonStyle.Success)
+            vfx: new ButtonBuilder().setCustomId('btn_role_vfx').setLabel('Assistant').setEmoji('✨').setStyle(ButtonStyle.Success)
         }
         const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(buttons.writing,buttons.actor,buttons.thumbnail,buttons.video,buttons.vfx)
         return message.channel.send({
@@ -241,31 +246,93 @@ client.once('ready', async (readyClient) => {
         }],
         status: 'online',
     })
-    channels.dashboard = readyClient.channels.cache.get('1237835745322991689')
-    channels.paidWriting = readyClient.channels.cache.get('1237158208800555028')
-    channels.paidVoice = readyClient.channels.cache.get('1237159237705007164')
-    channels.paidThumbnail = readyClient.channels.cache.get('1237159736088985710')
-    channels.paidVideo = readyClient.channels.cache.get('1237159528676458599')
+    channels.dashboard = readyClient.channels.cache.get('1279151232531042442')
+    channels.paidWriting = readyClient.channels.cache.get('1281165118138224662')
+    channels.paidVoice = readyClient.channels.cache.get('1281165132654972980')
+    channels.paidThumbnail = readyClient.channels.cache.get('1281165151013306369')
+    channels.paidVideo = readyClient.channels.cache.get('1281165165097652315')
     channels.paidVfx = readyClient.channels.cache.get('1237160166219059200')
-    channels.reportLog = readyClient.channels.cache.get('1237835829104218185')
+    channels.reportLog = readyClient.channels.cache.get('1279151233017450597')
+    channels.reportCLog = readyClient.channels.cache.get('1282329494375370797')
 
-    channels.hireWriting = readyClient.channels.cache.get('1237160760896131143')
-    channels.hireVoice = readyClient.channels.cache.get('1237160715429875803')
-    channels.hireThumbnail = readyClient.channels.cache.get('1237160651592437790')
-    channels.hireVideo = readyClient.channels.cache.get('1237160602540179487')
-    channels.hireVfx = readyClient.channels.cache.get('1237160431706181642')
+    channels.hireWriting = readyClient.channels.cache.get('1281165211897696317')
+    channels.hireVoice = readyClient.channels.cache.get('1281165212119990315')
+    channels.hireThumbnail = readyClient.channels.cache.get('1281165270345318400')
+    channels.hireVideo = readyClient.channels.cache.get('1281165294278279261')
+    channels.hireVfx = readyClient.channels.cache.get('1281165311898423306')
     
-    channels.logApproval = readyClient.channels.cache.get('1237846323819188315')
-    channels.logWarn = readyClient.channels.cache.get('1237846573367693473')
-    channels.logMessage = readyClient.channels.cache.get('1237845741574164530')
-    channels.logBump = readyClient.channels.cache.get('1240966428362936421')
-    channels.logDeletion = readyClient.channels.cache.get('1245363116599021588')
-    channels.logReview = readyClient.channels.cache.get('1264616357446815896')
+    channels.logApproval = readyClient.channels.cache.get('1279151233482887250')
+    channels.logWarn = readyClient.channels.cache.get('1279151233482887251')
+    channels.logMessage = readyClient.channels.cache.get('1279151233482887252')
+    channels.logBump = readyClient.channels.cache.get('1279151233482887254')
+    channels.logDeletion = readyClient.channels.cache.get('1279151233482887255')
+    channels.logReview = readyClient.channels.cache.get('1279151234208763975')
     
-    channels.reviewVerif = readyClient.channels.cache.get('1242542393455017994')
+    channels.reviewVerif = readyClient.channels.cache.get('1279151232531042443')
     console.log(chalk.bold(chalk.green('Bot is ready to go.\n\n')) + `${chalk.bold('Client ID')} : ${process.env.CLIENTID}\n${chalk.bold('Client Username')} : ${readyClient.user.username}`)
+    
+    setInterval(async () => {
+        const jobs = await getJobs()
+        jobs.forEach(async (job)=>{
+            const time = Date.now() - job.creationDate
+            const days = Math.round(((time/1000)/3600)/24)
+            if(days >= 6) {
+                let channel = channels.hireThumbnail
+                const user = await (await client.guilds.fetch(guildId)).members.fetch(job.userId)
+                try {
+                    const reason = 'Each post can only be up for 6 days.'
+                    user?.send({
+                        embeds: [
+                            new ErrorEmbed(`Post Deleted`, `Your post **${job.title}** has been deleted.\n${reason ? `**Reason** : ${reason}` : 'No reason provided'}`).setFooter({
+                                text: `ID : ${job.id}`
+                            })
+                        ]
+                    })
+                } catch (e) {
+                    console.log(e)
+                }
+                switch (job.skill) {
+                    case 'Writing':
+                        if(job.jobType == 'Paid') channel = channels.paidWriting
+                        else channel = channels.hireWriting
+                        break
+                    case 'Thumbnail':
+                        if(job.jobType == 'Paid') channel = channels.paidThumbnail
+                        else channel = channels.hireThumbnail
+                        break
+                    case 'Video':
+                        if(job.jobType == 'Paid') channel = channels.paidVideo
+                        else channel = channels.hireVideo
+                        break
+                    case 'VFX':
+                        if(job.jobType == 'Paid') channel = channels.paidVfx
+                        else channel = channels.hireVfx
+                        break
+                    case 'Voice':
+                        if(job.jobType == 'Paid') channel = channels.paidVoice
+                        else channel = channels.hireVoice
+                        break
+                }
+                try {
+                    (channel as ForumChannel).threads.fetch(job.message.id).then((thread) => {
+                        try {
+                            thread?.delete()
+                        } catch(e) {
+                            console.log(e)
+                        }
+                    })
+                    const jobEmbed = getJobEmbed(job.title, job.description, job.budget, job.reference, job.deadline, job.userTag, null, job.id, true, job.userId);
+                    (channels.logDeletion as TextChannel).send({embeds: [jobEmbed]})
+                } catch (e) {
+                    console.log(e)
+                }
+                deleteJob(job.id)
+                console.log(`Deleted ${job.id}`)
+            }
+            console.log(`${job.id} ${days}`)
+        })
+    }, 3600000);
 })
-
 const run = () => {
     mongoClient.connect().then(()=>{console.log(chalk.cyan(chalk.bold('Connected To MongoDB Database')))})
     client.login(process.env.BOTTOKEN)

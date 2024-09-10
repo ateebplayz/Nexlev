@@ -27,7 +27,7 @@ export async function execute(interaction:CommandInteraction) {
     let stars = 0
     switch ((interaction as ChatInputCommandInteraction).options.getString('stars', true)) {
         case '1':
-            stars = 1
+            stars = 1   
             break
         case '2':
             stars = 2

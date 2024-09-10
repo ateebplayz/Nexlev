@@ -43,9 +43,9 @@ export async function execute(interaction: StringSelectMenuInteraction) {
         if(value == 'vfx') {
             if(vfxRole)
             member.roles.add(vfxRole)
-            if(!user.skills.includes('VFX/GFX'))
-            await addSkill(interaction.user.id, interaction.user.tag, 'VFX/GFX')
-            skills.push('VFX/GFX')
+            if(!user.skills.includes('Assistant'))
+            await addSkill(interaction.user.id, interaction.user.tag, 'Assistant')
+            skills.push('Assistant')
         }
         
         if(value == 'thumbnail') {

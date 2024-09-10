@@ -23,7 +23,7 @@ export async function execute(interaction: ButtonInteraction) {
     await interaction.awaitModalSubmit({filter: star_wars, time: 6000_00}).then((mi)=>{
         const text_job_Reason_input = mi.fields.getTextInputValue('text_job_reason')
         mi.reply({content: `The post has been reported, and our moderation team will investigate the post, thank you.`, ephemeral: true})
-        const delete_button = new ButtonBuilder().setCustomId('btn_delete').setLabel('Clear Report').setStyle(ButtonStyle.Danger)
+        const delete_button = new ButtonBuilder().setCustomId('btn_report_delete').setLabel('Clear Report').setStyle(ButtonStyle.Danger)
         const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(delete_button)
         const embedUser = new ErrorEmbed(`New Report!`, `**Usertag of user who reported** : ${mi.user.tag}\n**User ID of the user who reported** : ${mi.user.id}\n\n**Usertag of the owner of post** : ${job.userTag}\n**User ID of the owner of post** : ${job.userId}\n**Post Link** : ${job.message.url}`).addFields({name: 'Reason', value: text_job_Reason_input})
         const embed = getJobEmbed(job.title, job.description, job.budget, job.reference, job.deadline, job.userTag, mi.user.avatarURL(), job.id);

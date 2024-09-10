@@ -18,7 +18,7 @@ export async function execute(interaction: ButtonInteraction) {
                 new StringSelectMenuOptionBuilder().setDescription('Select the Writing Skill').setEmoji('✍️').setLabel('Writing').setValue('writing'),
                 new StringSelectMenuOptionBuilder().setDescription('Select the Voice Acting Skill').setEmoji('🎤').setLabel('Voice Acting').setValue('voice'),
                 new StringSelectMenuOptionBuilder().setDescription('Select the Video Editor Skill').setEmoji('📷').setLabel('Video Editor').setValue('video'),
-                new StringSelectMenuOptionBuilder().setDescription('Select the VFX/GFX Skill').setEmoji('✨').setLabel('VFX/GFX').setValue('vfx'),
+                new StringSelectMenuOptionBuilder().setDescription('Select the Assistant Skill').setEmoji('✨').setLabel('Assistant').setValue('vfx'),
                 new StringSelectMenuOptionBuilder().setDescription('Select the Thumbnail Artist Skill').setEmoji('🎨').setLabel('Thumbnail Artist').setValue('thumbnail')
             ])
             const actionRow = new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(textDropdown)

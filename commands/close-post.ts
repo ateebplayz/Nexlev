@@ -11,6 +11,7 @@ export const data = new SlashCommandBuilder()
     .setName('delete-post')
     .setDescription('Close your post.')
     .addStringOption(option => option.setName('id').setDescription('The ID of the post(found in the footer).').setRequired(true))
+    .addStringOption(option => option.setName('reason').setDescription('Provide a reason for deleting the post').setRequired(false))
 export const options: CommandOptions = {
     cooldown: 10000,
     permissionLevel: 'all'
@@ -25,6 +26,21 @@ export async function execute(interaction:CommandInteraction) {
         const member = await interaction.guild?.members.fetch(interaction.user)
         if(interaction.user.id == postData.userId || member?.permissions.has([discord.PermissionFlagsBits.Administrator])) {
             let channel = channels.hireThumbnail
+            if(member?.permissions.has([discord.PermissionFlagsBits.Administrator])) {
+                const user = await interaction.guild?.members.fetch(postData.userId)
+                try {
+                    const reason = (interaction as ChatInputCommandInteraction).options.getString('reason')
+                    user?.send({
+                        embeds: [
+                            new ErrorEmbed(`Post Deleted`, `Your post **${postData.title}** has been deleted.\n${reason ? `**Reason** : ${reason}` : 'No reason provided'}`).setFooter({
+                                text: postData.id
+                            })
+                        ]
+                    })
+                } catch (e) {
+                    console.log(e)
+                }
+            }
             switch (postData.skill) {
                 case 'Writing':
                     if(postData.jobType == 'Paid') channel = channels.paidWriting
@@ -55,12 +71,13 @@ export async function execute(interaction:CommandInteraction) {
 
                     }
                 })
-                const jobEmbed = getJobEmbed(postData.title, postData.description, postData.budget, postData.reference, postData.deadline, postData.userTag, null, postData.id, true);
+                const jobEmbed = getJobEmbed(postData.title, postData.description, postData.budget, postData.reference, postData.deadline, postData.userTag, null, postData.id, true, postData.userId);
                 (channels.logDeletion as TextChannel).send({embeds: [jobEmbed]})
             } catch (e) {
                 console.log(e)
             }
             deleteJob(postId)
+
             return interaction.editReply({content: `Your post has been successfully deleted.`})
         } else {
             return interaction.editReply({content: `Only the owner of this post can edit this post.`})

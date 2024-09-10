@@ -33,7 +33,7 @@ export async function execute(interaction: ButtonInteraction) {
             updateMessage(job.id, msg.id, msg.url)
             if(job.jobType !== 'Paid')
             msg.send({components: [messageActionRow], content: `👉  Bump your post by clicking on the 'Bump' button, it will boost your post's visibility.`})
-            const logEmbed = new InfoEmbed('New Approval', `**Job Moderator ID** : ${interaction.user.id}\n**Job Moderator Tag** : ${interaction.user.tag}\n**Job Link** : ${msg.url}`);
+            const logEmbed = new InfoEmbed('New Approval', `**Job Moderator ID** : ${interaction.user.id}\n**Job Moderator Tag** : ${interaction.user.tag}\n**Job Link** : ${msg.url}\n**Job User ID** : ${job.userId}`);
             (channels.logApproval as TextChannel).send({embeds: [logEmbed,embed]})
             break
         case 'Thumbnail':
@@ -42,7 +42,7 @@ export async function execute(interaction: ButtonInteraction) {
             updateMessage(job.id, msg2.id, msg2.url)
             if(job.jobType !== 'Paid')
             msg2.send({components: [messageActionRow], content: `👉  Bump your post by clicking on the 'Bump' button, it will boost your post's visibility.`})
-            const logEmbed2 = new InfoEmbed('New Approval', `**Job Moderator ID** : ${interaction.user.id}\n**Job Moderator Tag** : ${interaction.user.tag}\n**Job Link** : ${msg2.url}`);
+            const logEmbed2 = new InfoEmbed('New Approval', `**Job Moderator ID** : ${interaction.user.id}\n**Job Moderator Tag** : ${interaction.user.tag}\n**Job Link** : ${msg2.url}\n**Job User ID** : ${job.userId}`);
             (channels.logApproval as TextChannel).send({embeds: [logEmbed2,embed]})
             break
         case 'VFX':
@@ -51,7 +51,7 @@ export async function execute(interaction: ButtonInteraction) {
             updateMessage(job.id, msg3.id, msg3.url)
             if(job.jobType !== 'Paid')
             msg3.send({components: [messageActionRow], content: `👉  Bump your post by clicking on the 'Bump' button, it will boost your post's visibility.`})
-            const logEmbed3 = new InfoEmbed('New Approval', `**Job Moderator ID** : ${interaction.user.id}\n**Job Moderator Tag** : ${interaction.user.tag}\n**Job Link** : ${msg3.url}`);
+            const logEmbed3 = new InfoEmbed('New Approval', `**Job Moderator ID** : ${interaction.user.id}\n**Job Moderator Tag** : ${interaction.user.tag}\n**Job Link** : ${msg3.url}\n**Job User ID** : ${job.userId}`);
             (channels.logApproval as TextChannel).send({embeds: [logEmbed3,embed]})
             break
         case 'Video':
@@ -61,7 +61,7 @@ export async function execute(interaction: ButtonInteraction) {
             if(job.jobType !== 'Paid')
             msg4.send({components: [messageActionRow], content: `👉  Bump your post by clicking on the 'Bump' button, it will boost your post's visibility.`})
             
-            const logEmbed4 = new InfoEmbed('New Approval', `**Job Moderator ID** : ${interaction.user.id}\n**Job Moderator Tag** : ${interaction.user.tag}\n**Job Link** : ${msg4.url}`);
+            const logEmbed4 = new InfoEmbed('New Approval', `**Job Moderator ID** : ${interaction.user.id}\n**Job Moderator Tag** : ${interaction.user.tag}\n**Job Link** : ${msg4.url}\n**Job User ID** : ${job.userId}`);
             (channels.logApproval as TextChannel).send({embeds: [logEmbed4,embed]})
             break
         case 'Voice':
@@ -71,7 +71,7 @@ export async function execute(interaction: ButtonInteraction) {
             if(job.jobType !== 'Paid')
             msg5.send({components: [messageActionRow], content: `👉  Bump your post by clicking on the 'Bump' button, it will boost your post's visibility.`})
             
-            const logEmbed5 = new InfoEmbed('New Approval', `**Job Moderator ID** : ${interaction.user.id}\n**Job Moderator Tag** : ${interaction.user.tag}\n**Job Link** : ${msg5.url}`);
+            const logEmbed5 = new InfoEmbed('New Approval', `**Job Moderator ID** : ${interaction.user.id}\n**Job Moderator Tag** : ${interaction.user.tag}\n**Job Link** : ${msg5.url}\n**Job User ID** : ${job.userId}`);
             (channels.logApproval as TextChannel).send({embeds: [logEmbed5,embed]})
             break
     }

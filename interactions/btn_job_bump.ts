@@ -10,7 +10,7 @@ export async function execute(interaction: ButtonInteraction) {
     const job = await findJob(jobId)
     if(interaction.user.id == job.userId) {
         if(Date.now() - job.bumpDate >= 8.64e+7) {// 1 day
-            interaction.reply({content: `Your post has been bumped!`})
+            interaction.reply({ephemeral: true, content: `Your post has been bumped!`})
             interaction.channel?.send('Bump Message').then((msg)=>{
                 msg.delete()
             })

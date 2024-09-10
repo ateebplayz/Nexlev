@@ -281,13 +281,13 @@ client.once('ready', async (readyClient) => {
                 const user = await (await client.guilds.fetch(guildId)).members.fetch(job.userId)
                 try {
                     const reason = 'Each post can only be up for 6 days.'
-                    user?.send({
+                    /* user?.send({
                         embeds: [
                             new ErrorEmbed(`Post Deleted`, `Your post **${job.title}** has been deleted.\n${reason ? `**Reason** : ${reason}` : 'No reason provided'}`).setFooter({
                                 text: `ID : ${job.id}`
                             })
                         ]
-                    })
+                    }) */
                 } catch (e) {
                     console.log(e)
                 }

@@ -20,4 +20,4 @@ export const zeroJob: Job = {
     creationDate: 0,
     bumpDate: 0
 }
-export const guildId = '1279151230538616872'
+export const guildId = '1236733198491324537 '

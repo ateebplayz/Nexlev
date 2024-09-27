@@ -51,14 +51,14 @@ export async function execute(interaction: ButtonInteraction) {
         userJobs.forEach((job)=>{
             if(job.skill == job_type) found = true
         })
-        if(found) {
+        /* if(found) {
             return mI.editReply({embeds: [
                 {
                   "description": "<:flecha113:1239895323594457149> Hey, you have already posted a for-hire ad. You cannot post the same ad more than once. If you want to edit or repost your for-hire ad, you can delete the existing one by using the command /post delete. This command will delete your current ad, allowing you to repost it again if you wish.\n\n<:line_arrow_white1:1239912525143871518> Or, if you want to increase your for-hire ad visibility, you can bump your post. The bump option is below your post.",
                   "color": 0x1b9ee6
                 }
               ]})
-        }
+        } */
         job_title = mI.fields.getTextInputValue('text_gig_title')
         job_desc = mI.fields.getTextInputValue('text_gig_desc')
         job_portfolio = mI.fields.getTextInputValue('text_gig_budget')

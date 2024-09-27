@@ -12,7 +12,7 @@ export async function execute(interaction: ButtonInteraction) {
     // Creating Text Input Fields
     const text_gig_title = new TextInputBuilder().setCustomId('text_gig_title').setLabel('For-Hire Title').setMaxLength(50).setMinLength(3).setPlaceholder('What service or skills are you offering?').setRequired(true).setStyle(TextInputStyle.Short)
     const text_gig_desc = new TextInputBuilder().setCustomId('text_gig_desc').setLabel('For-Hire Description').setMaxLength(2000).setMinLength(3).setPlaceholder('Please share details about the service you are offering. Tell us about your skills, experience, etc.').setRequired(true).setStyle(TextInputStyle.Paragraph)
-    const text_gig_budget = new TextInputBuilder().setCustomId('text_gig_budget').setLabel('Your Portfolio Link').setMaxLength(50).setMinLength(3).setPlaceholder('Share your Nexlev portfolio link or your custom site portfolio.').setRequired(true).setStyle(TextInputStyle.Paragraph)
+    const text_gig_budget = new TextInputBuilder().setCustomId('text_gig_budget').setLabel('Your Portfolio Link').setMaxLength(500).setMinLength(3).setPlaceholder('Share your Nexlev portfolio link or your custom site portfolio.').setRequired(true).setStyle(TextInputStyle.Paragraph)
     const text_gig_deadline = new TextInputBuilder().setCustomId('text_gig_deadline').setLabel('Payment Method').setMaxLength(50).setMinLength(3).setPlaceholder('What’s your preferred payment method?').setStyle(TextInputStyle.Short)
     const textInputs = [text_gig_title, text_gig_desc, text_gig_budget, text_gig_deadline]
     const modal = new ModalBuilder().setCustomId('modal_gig_hire_'+interaction.id).setTitle('Post a For Hire Ad')
